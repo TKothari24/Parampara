@@ -202,7 +202,7 @@
 <body>
   <div class="wrap">
     <h2>Seller Dashboard</h2>
-    <p class="subtle">Manage your products and publish new listings. Images are stored in the product‑images</p>
+    <p class="subtle">Manage your products and publish new listings. images1 are stored in the product‑images1</p>
     <div id="gate" class="muted">Checking approval…</div>
 
     <div id="content" style="display:none" class="grid">
@@ -248,7 +248,7 @@
           </div>
           <button type="submit">Publish</button>
         </form>
-        <div class="muted" style="margin-top:8px">Images upload <code>product-images</code>.</div>
+        <div class="muted" style="margin-top:8px">images1 upload <code>product-images1</code>.</div>
       </div>
 
       <div class="card">
@@ -277,7 +277,7 @@
 
   <script>
     (async function sellerDash(){
-      const BUCKET = 'product-images';
+      const BUCKET = 'product-images1';
       const gate = document.getElementById('gate');
       const content = document.getElementById('content');
       const prodForm = document.getElementById('prodForm');
@@ -348,9 +348,9 @@
             shipEl.innerHTML = `<h3 style="border:none;margin:0 0 8px 0">Buyer</h3><div class="order-summary"><div class="summary-item"><span>Info</span><span>No shipping info saved.</span></div></div>`;
           }
           const listHtml = (items||[]).map(it => {
-            const img = it.image_url || 'images/placeholder.png';
+            const img = it.image_url || 'images1/placeholder.png';
             const qty = Number(it.qty)||1; const price = Number(it.price)||0;
-            return `<div class="order-item"><img src="${img}" alt="${it.product_name}" onerror="this.onerror=null;this.src='images/placeholder.png';"/><div class="info"><div class="name">${it.product_name}</div><div class="meta">Qty: ${qty}</div></div><div class="price">₹${(qty*price).toLocaleString('en-IN')}</div></div>`;
+            return `<div class="order-item"><img src="${img}" alt="${it.product_name}" onerror="this.onerror=null;this.src='images1/placeholder.png';"/><div class="info"><div class="name">${it.product_name}</div><div class="meta">Qty: ${qty}</div></div><div class="price">₹${(qty*price).toLocaleString('en-IN')}</div></div>`;
           }).join('');
           itemsEl.innerHTML = `<h3 style="border:none;margin:0 0 8px 0">Items</h3><div class="order-items">${listHtml||'<div class="meta">No items</div>'}</div>`;
         } catch (err) {
@@ -475,7 +475,7 @@
           if (metricsEl) metricsEl.innerHTML = `
             <div class="metric"><h4>0</h4><small>Total Products</small></div>
             <div class="metric"><h4>0</h4><small>Published Today</small></div>
-            <div class="metric"><h4>0</h4><small>With Images</small></div>`;
+            <div class="metric"><h4>0</h4><small>With images1</small></div>`;
           return [];
         }
         const rows = ['<table class="table"><thead><tr><th>Created</th><th>Name</th><th>Price</th><th>Image</th><th>Actions</th></tr></thead><tbody>'];
@@ -498,11 +498,11 @@
           const total = data.length;
           const todayStr = new Date().toDateString();
           const today = data.filter(x => x.created_at && new Date(x.created_at).toDateString() === todayStr).length;
-          const withImages = data.filter(x => !!x.image_url).length;
+          const withimages1 = data.filter(x => !!x.image_url).length;
           if (metricsEl) metricsEl.innerHTML = `
             <div class="metric"><h4>${total}</h4><small>Total Products</small></div>
             <div class="metric"><h4>${today}</h4><small>Published Today</small></div>
-            <div class="metric"><h4>${withImages}</h4><small>With Images</small></div>`;
+            <div class="metric"><h4>${withimages1}</h4><small>With images1</small></div>`;
         } catch {}
         return data;
       }
@@ -665,7 +665,7 @@
               <div style="margin-bottom: 8px;">
                 ${order.order_items.map(item => `
                   <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                    <img src="${item.image || 'images/placeholder.png'}" alt="${item.product_name}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
+                    <img src="${item.image || 'images1/placeholder.png'}" alt="${item.product_name}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
                     <div style="flex: 1;">
                       <div style="font-weight: 600; font-size: 14px;">${item.product_name}</div>
                       <div style="color: #666; font-size: 12px;">Qty: ${item.quantity} × ₹${item.price}</div>

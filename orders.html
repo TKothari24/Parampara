@@ -160,11 +160,11 @@
           const when = new Date(o.created_at).toLocaleString();
           const items = byOrder.get(o.id) || [];
           const itemsHtml = items.map(it => {
-            const img = it.image_url || 'images/placeholder.png';
+            const img = it.image_url || 'images1/placeholder.png';
             const qty = Number(it.qty)||1; const price = Number(it.price)||0;
             return `
               <div class="order-item">
-                <img src="${img}" alt="${it.product_name}" onerror="this.onerror=null;this.src='images/placeholder.png';" />
+                <img src="${img}" alt="${it.product_name}" onerror="this.onerror=null;this.src='images1/placeholder.png';" />
                 <div class="info">
                   <div class="name">${it.product_name}</div>
                   <div class="meta">Qty: ${qty}</div>

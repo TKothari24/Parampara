@@ -1,12 +1,12 @@
 function getImage(mapping, name) {
-  if (!name) return "images/placeholder.png";
+  if (!name) return "images1/placeholder.png";
   const normalized = name.replace(/\s+/g, '').toLowerCase();
   for (const key in mapping) {
     if (key.replace(/\s+/g, '').toLowerCase() === normalized) {
       return mapping[key];
     }
   }
-  return "images/placeholder.png";
+  return "images1/placeholder.png";
 }
 
 // ---- Cart badge and utils ----
@@ -643,118 +643,118 @@ async function updateAuthUI() {
     console.error("updateAuthUI error", e);
   }
 }
-// ---------- Static Product Images Map ----------
-const productImages = {
-  "Rangoli Design Kit": "images/products/rangoli.jpg",
-  "Decorative Diya Set": "images/products/diya.png",
+// ---------- Static Product images1 Map ----------
+const productimages1 = {
+  "Rangoli Design Kit": "images1/products/rangoli.jpg",
+  "Decorative Diya Set": "images1/products/diya.png",
   //ganesh chaturthi products photo//
-  "Shadu Mati Ganesh Idol": "images/products/ganesh-idol.jpg",
-  "Ukadiche Modak": "images/products/modak.png",
-  "Torans": "images/products/maharastrian toran.jpg",
-  "Decorative Mandap Set": "images/products/Decorative Mandap.jpeg",
+  "Shadu Mati Ganesh Idol": "images1/products/ganesh-idol.jpg",
+  "Ukadiche Modak": "images1/products/modak.png",
+  "Torans": "images1/products/maharastrian toran.jpg",
+  "Decorative Mandap Set": "images1/products/Decorative Mandap.jpeg",
 
   //eid products photo//
-  "Men's Kurta Pajama": "images/products/eid attire men.jpeg",
-  "Embroidered Eid Abaya": "images/products/eid attire women.webp",
-  "Sheer Khurma Pack": "images/products/sheer khurmaa.jpg",
-  "Attar (Non-Alcoholic Perfume)": "images/products/attar.jpg",
+  "Men's Kurta Pajama": "images1/products/eid attire men.jpeg",
+  "Embroidered Eid Abaya": "images1/products/eid attire women.webp",
+  "Sheer Khurma Pack": "images1/products/sheer khurmaa.jpg",
+  "Attar (Non-Alcoholic Perfume)": "images1/products/attar.jpg",
 
-  "Ganesh Idol": "images/products/ganesh-idol.jpg",
+  "Ganesh Idol": "images1/products/ganesh-idol.jpg",
   //navratri products photo//
-  "Dandiya Sticks": "images/products/dandiyasticks.jpg",
-  "Navratri Dandiya Sticks": "images/products/dandiyasticks.jpg",
-  "Decorated Dandiya Sticks": "images/products/dandiyasticks.jpg",
-  "Vibrant Lehenga-Choli": "images/products/Vibrant Lehenga-Choli.jpg",
-  "Kediyu & Dhoti (Men’s Outfit)": "images/products/Kediyu & Dhoti (Men’s Outfit).webp",
-  "Oxidized Silver Jewelry Set": "images/products/Oxidized Silver Jewelry Set.jpg",
+  "Dandiya Sticks": "images1/products/dandiyasticks.jpg",
+  "Navratri Dandiya Sticks": "images1/products/dandiyasticks.jpg",
+  "Decorated Dandiya Sticks": "images1/products/dandiyasticks.jpg",
+  "Vibrant Lehenga-Choli": "images1/products/Vibrant Lehenga-Choli.jpg",
+  "Kediyu & Dhoti (Men’s Outfit)": "images1/products/Kediyu & Dhoti (Men’s Outfit).webp",
+  "Oxidized Silver Jewelry Set": "images1/products/Oxidized Silver Jewelry Set.jpg",
   //diwali products photo//
-  "Diwali Diyas": "images/products/diya1.jpg",
-  "Matki": "images/products/matki.jpg",
-  "Diya": "images/products/diya.png",
-  "Saree": "images/products/saree.png",
-  "Saree2": "images/products/saree2.png",
-  "Modak": "images/products/modak.png",
-  "Lantern": "images/products/lantern.jpg",
-  "Colorful Lanterns": "images/products/lantern.jpg",
-  "Rangoli": "images/products/rangoli.jpg",
-  "Sweets": "images/products/sweets.png",
-  "Faral(Traditional Diwali Snacks and Sweets)": "images/products/sweets.png",
-  "Sample Product": "images/placeholder.png",
+  "Diwali Diyas": "images1/products/diya1.jpg",
+  "Matki": "images1/products/matki.jpg",
+  "Diya": "images1/products/diya.png",
+  "Saree": "images1/products/saree.png",
+  "Saree2": "images1/products/saree2.png",
+  "Modak": "images1/products/modak.png",
+  "Lantern": "images1/products/lantern.jpg",
+  "Colorful Lanterns": "images1/products/lantern.jpg",
+  "Rangoli": "images1/products/rangoli.jpg",
+  "Sweets": "images1/products/sweets.png",
+  "Faral(Traditional Diwali Snacks and Sweets)": "images1/products/sweets.png",
+  "Sample Product": "images1/placeholder.png",
 
   // Add more mappings as needed
-  "Bandhani Saree": "images/products/Bandhani saree.jpg",
-  "Blue Pottery Vase": "images/products/Blue Pottery Vase.png",
-  "Mojari Footwear": "images/products/Mojari Footwear.jpg",
-  "Rajasthani Puppet Set (Kathputli)": "images/products/Rajasthani Puppet Set (Kathputli).png",
-  "Kasavu Saree": "images/products/Kasavu Saree.jpg",
-  "Nettipattam Wall Hanging": "images/products/Nettipattam Wall Hanging.jpg",
-  "Coconut Shell Handicrafts": "images/products/Coconut Shell Handicrafts.jpg",
-  "Kerala Mural Painting (Mini Frame)": "images/products/Kerala Mural Painting (Mini Frame).jpg",
-  "Rasgulla": "images/products/Rasgulla.jpg",
-  "Kantha Embroidery Dupatta": "images/products/Kantha Embroidery Dupatta.jpg",
-  "Bankura Terracotta Horse": "images/products/Bankura Terracotta Horse.jpg",
-  "Dokra Metal Craft": "images/products/Dokra Metal Craft.jpg",
-  "Mysore Silk Saree": "images/products/Mysore Silk Saree.jpg",
-  "Sandalwood Carving": "images/products/Sandalwood Carving.jpg",
-  "Bidriware Vase": "images/products/Bidriware Vase.jpg",
-  "Channapatna Wooden Toys": "images/products/Channapatna Wooden Toys.jpg",
-  "Tanjore Painting": "images/products/Tanjore Painting.jpg",
-  "Bronze Idol (Chola Art)": "images/products/Bronze Idol (Chola Art).jpg",
-  "Mysore Pak": "images/products/MysorePak.jpg",
-  "Kanchipuram Silk Saree": "images/products/Kanchipuram Silk Saree.jpg",
-  "Chikankari Embroidered Dupatta": "images/products/Chikankari Embroidered Dupatta.jpg",
-  "Khurja Pottery Set": "images/products/Khurja Pottery Set.jpg",
-  "Petha Sweet from Agra": "images/products/Petha Sweet from Agra.jpg",
-  "Banarasi Saree": "images/products/Banarasi Saree.jpg",
-  "Phulkari Embroidery Dupatta": "images/products/Phulkari Embroidery Dupatta.jpg",
-  "Punjabi Jutti": "images/products/Punjabi Jutti.jpg",
-  "Gajak": "images/products/Gajak.jpg",
-  "Paranda": "images/products/Paranda.jpg",
-  "Pattachitra Painting": "images/products/Pattachitra Painting.jpg",
-  "Chhena Poda": "images/products/Chhena Poda.jpg",
-  "Sambalpuri Saree": "images/products/Sambalpuri Saree.jpg",
-  "Silver Filigree Jewelry": "images/products/Silver Filigree Jewelry.jpg",
-  "Assam Silk Mekhela Chador": "images/products/Assam Silk Mekhela Chador.jpg",
-  "Jaapi (Traditional Hat)": "images/products/Jaapi (Traditional Hat).jpg",
-  "Assam Tea Pack": "images/products/Assam Tea Pack.jpg",
-  "Dokra Brass Figurine": "images/products/Dokra Brass Figurine.jpg",
-  "Kullu Shawl": "images/products/Kullu Shawl.jpg",
-  "Chamba Rumal Embroidery": "images/products/Chamba Rumal Embroidery.jpg",
-  "Apple Cider Pack": "images/products/Apple-Cider.jpg",
-  "Kinnauri Topi": "images/products/Kinnauri Topi.jpg"
+  "Bandhani Saree": "images1/products/Bandhani saree.jpg",
+  "Blue Pottery Vase": "images1/products/Blue Pottery Vase.png",
+  "Mojari Footwear": "images1/products/Mojari Footwear.jpg",
+  "Rajasthani Puppet Set (Kathputli)": "images1/products/Rajasthani Puppet Set (Kathputli).png",
+  "Kasavu Saree": "images1/products/Kasavu Saree.jpg",
+  "Nettipattam Wall Hanging": "images1/products/Nettipattam Wall Hanging.jpg",
+  "Coconut Shell Handicrafts": "images1/products/Coconut Shell Handicrafts.jpg",
+  "Kerala Mural Painting (Mini Frame)": "images1/products/Kerala Mural Painting (Mini Frame).jpg",
+  "Rasgulla": "images1/products/Rasgulla.jpg",
+  "Kantha Embroidery Dupatta": "images1/products/Kantha Embroidery Dupatta.jpg",
+  "Bankura Terracotta Horse": "images1/products/Bankura Terracotta Horse.jpg",
+  "Dokra Metal Craft": "images1/products/Dokra Metal Craft.jpg",
+  "Mysore Silk Saree": "images1/products/Mysore Silk Saree.jpg",
+  "Sandalwood Carving": "images1/products/Sandalwood Carving.jpg",
+  "Bidriware Vase": "images1/products/Bidriware Vase.jpg",
+  "Channapatna Wooden Toys": "images1/products/Channapatna Wooden Toys.jpg",
+  "Tanjore Painting": "images1/products/Tanjore Painting.jpg",
+  "Bronze Idol (Chola Art)": "images1/products/Bronze Idol (Chola Art).jpg",
+  "Mysore Pak": "images1/products/MysorePak.jpg",
+  "Kanchipuram Silk Saree": "images1/products/Kanchipuram Silk Saree.jpg",
+  "Chikankari Embroidered Dupatta": "images1/products/Chikankari Embroidered Dupatta.jpg",
+  "Khurja Pottery Set": "images1/products/Khurja Pottery Set.jpg",
+  "Petha Sweet from Agra": "images1/products/Petha Sweet from Agra.jpg",
+  "Banarasi Saree": "images1/products/Banarasi Saree.jpg",
+  "Phulkari Embroidery Dupatta": "images1/products/Phulkari Embroidery Dupatta.jpg",
+  "Punjabi Jutti": "images1/products/Punjabi Jutti.jpg",
+  "Gajak": "images1/products/Gajak.jpg",
+  "Paranda": "images1/products/Paranda.jpg",
+  "Pattachitra Painting": "images1/products/Pattachitra Painting.jpg",
+  "Chhena Poda": "images1/products/Chhena Poda.jpg",
+  "Sambalpuri Saree": "images1/products/Sambalpuri Saree.jpg",
+  "Silver Filigree Jewelry": "images1/products/Silver Filigree Jewelry.jpg",
+  "Assam Silk Mekhela Chador": "images1/products/Assam Silk Mekhela Chador.jpg",
+  "Jaapi (Traditional Hat)": "images1/products/Jaapi (Traditional Hat).jpg",
+  "Assam Tea Pack": "images1/products/Assam Tea Pack.jpg",
+  "Dokra Brass Figurine": "images1/products/Dokra Brass Figurine.jpg",
+  "Kullu Shawl": "images1/products/Kullu Shawl.jpg",
+  "Chamba Rumal Embroidery": "images1/products/Chamba Rumal Embroidery.jpg",
+  "Apple Cider Pack": "images1/products/Apple-Cider.jpg",
+  "Kinnauri Topi": "images1/products/Kinnauri Topi.jpg"
 };
 
-const festivalImages = {
-  "Ganpati": "images/festivals/ganpati.png",
-  "Ganesh Chaturthi": "images/festivals/ganpati.png",
-  "Diwali": "images/festivals/diwalii.png",
-  "Holi": "images/festivals/holi.png",
-  "Eid": "images/festivals/eid.png",
-  "Navratri": "images/festivals/navratri.png",
-  "Gudi Padwa": "images/festivals/gudi padwa.jpg",
-  "Durga Puja": "images/festivals/Durga Puja.jpg",
-  "Andhra Ugadi": "images/festivals/andhra-ugadi-pachadi.jpg",
-  "Ugadi": "images/festivals/andhra-ugadi-pachadi.jpg",
-  "Karva Chauth": "images/festivals/Karwa_Chauth.webp",
-  "Kumbh Mela": "images/festivals/kumb mela.webp",
-  "Raksha Bandhan": "images/festivals/raksha bandhan.webp",
-  "Ram Navami": "images/festivals/ram navmi.jpg",
-  "Baisakhi": "images/festivals/baisakhi.jpg",
-  "Basant Panchami": "images/festivals/basant-panchami.jpg",
-  "Vasant Panchami": "images/festivals/basant-panchami.jpg",
-  "Bihu": "images/festivals/bihu.webp",
-  "Chhath Puja": "images/festivals/chhath puja.jpg",
-  "Christmas": "images/festivals/Christmas-.webp",
-  "Dussehra": "images/festivals/navratri.png",
-  "Guru Purnima": "images/festivals/guru-purnima.jpg",
-  "Lohri": "images/festivals/Lohri.webp",
-  "Mahashivratri": "images/festivals/mahashivratri.webp",
-  "Shivratri": "images/festivals/shivratri.jpg",
-  "Makar Sankranti": "images/festivals/Makar Sankranti.jpg",
-  "Onam": "images/festivals/onam.jpg",
-  "Pongal": "images/festivals/pongal.jpg",
-   "Janmashtami": "images/festivals/Janmashtami.png",
-    "Easter": "images/festivals/Easter.jpg",
+const festivalimages1 = {
+  "Ganpati": "images1/festivals/ganpati.png",
+  "Ganesh Chaturthi": "images1/festivals/ganpati.png",
+  "Diwali": "images1/festivals/diwalii.png",
+  "Holi": "images1/festivals/holi.png",
+  "Eid": "images1/festivals/eid.png",
+  "Navratri": "images1/festivals/navratri.png",
+  "Gudi Padwa": "images1/festivals/gudi padwa.jpg",
+  "Durga Puja": "images1/festivals/Durga Puja.jpg",
+  "Andhra Ugadi": "images1/festivals/andhra-ugadi-pachadi.jpg",
+  "Ugadi": "images1/festivals/andhra-ugadi-pachadi.jpg",
+  "Karva Chauth": "images1/festivals/Karwa_Chauth.webp",
+  "Kumbh Mela": "images1/festivals/kumb mela.webp",
+  "Raksha Bandhan": "images1/festivals/raksha bandhan.webp",
+  "Ram Navami": "images1/festivals/ram navmi.jpg",
+  "Baisakhi": "images1/festivals/baisakhi.jpg",
+  "Basant Panchami": "images1/festivals/basant-panchami.jpg",
+  "Vasant Panchami": "images1/festivals/basant-panchami.jpg",
+  "Bihu": "images1/festivals/bihu.webp",
+  "Chhath Puja": "images1/festivals/chhath puja.jpg",
+  "Christmas": "images1/festivals/Christmas-.webp",
+  "Dussehra": "images1/festivals/navratri.png",
+  "Guru Purnima": "images1/festivals/guru-purnima.jpg",
+  "Lohri": "images1/festivals/Lohri.webp",
+  "Mahashivratri": "images1/festivals/mahashivratri.webp",
+  "Shivratri": "images1/festivals/shivratri.jpg",
+  "Makar Sankranti": "images1/festivals/Makar Sankranti.jpg",
+  "Onam": "images1/festivals/onam.jpg",
+  "Pongal": "images1/festivals/pongal.jpg",
+   "Janmashtami": "images1/festivals/Janmashtami.png",
+    "Easter": "images1/festivals/Easter.jpg",
   // Add more mappings as needed
 };
 // -------------------------------
@@ -815,12 +815,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     const card = document.createElement("div");
     card.className = "diwali-featured-card";
     // Rule: Master products use frontend map; Seller products use their uploaded image only
-    const mapped = getImage(productImages, product.name);
+    const mapped = getImage(productimages1, product.name);
     const imageUrl = product._src === 'seller'
-      ? (product.image_url || 'images/placeholder.png')
-      : (mapped || 'images/placeholder.png');
+      ? (product.image_url || 'images1/placeholder.png')
+      : (mapped || 'images1/placeholder.png');
     card.innerHTML = `
-      <img src="${imageUrl}" alt="${product.name}" onerror="this.onerror=null;this.src='images/placeholder.png';">
+      <img src="${imageUrl}" alt="${product.name}" onerror="this.onerror=null;this.src='images1/placeholder.png';">
       <h3>${product.name}</h3>
       <p class="price">₹${product.price}</p>
       <div class="desc">${product.description || ""}</div>
@@ -838,8 +838,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     overlay.querySelector('#modalPrice').textContent = typeof price === 'number' ? `₹${price}` : (price || '');
     const img = overlay.querySelector('#modalImg');
     if (img) {
-      img.src = imageUrl || 'images/placeholder.png';
-      img.onerror = () => { img.src = 'images/placeholder.png'; };
+      img.src = imageUrl || 'images1/placeholder.png';
+      img.onerror = () => { img.src = 'images1/placeholder.png'; };
     }
     currentModalProduct = { name: title, price: price, image: imageUrl };
   }
@@ -859,7 +859,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       container.innerHTML = "";
       const fallback = ["Diwali", "Holi", "Eid", "Navratri", "Ganesh Chaturthi"]; 
       fallback.forEach(name => {
-        const img = getImage(festivalImages, name);
+        const img = getImage(festivalimages1, name);
         const card = document.createElement("div");
         card.className = "festival-product-card";
         card.innerHTML = `
@@ -879,7 +879,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       container.innerHTML = "";
       const fallback = ["Diwali", "Holi", "Eid", "Navratri", "Ganesh Chaturthi"]; 
       fallback.forEach(name => {
-        const img = getImage(festivalImages, name);
+        const img = getImage(festivalimages1, name);
         const card = document.createElement("div");
         card.className = "festival-product-card";
         card.innerHTML = `
@@ -898,7 +898,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       container.innerHTML = "";
       const fallback = ["Diwali", "Holi", "Eid", "Navratri", "Ganesh Chaturthi"]; 
       fallback.forEach(name => {
-        const img = getImage(festivalImages, name);
+        const img = getImage(festivalimages1, name);
         const card = document.createElement("div");
         card.className = "festival-product-card";
         card.innerHTML = `
@@ -916,7 +916,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       container.innerHTML = "";
       const fallback = ["Diwali", "Holi", "Eid", "Navratri", "Ganesh Chaturthi"]; 
       fallback.forEach(name => {
-        const img = getImage(festivalImages, name);
+        const img = getImage(festivalimages1, name);
         const card = document.createElement("div");
         card.className = "festival-product-card";
         card.innerHTML = `
@@ -976,7 +976,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     sortedFestivals.forEach(fest => {
-      const imageUrl = getImage(festivalImages, fest.name);
+      const imageUrl = getImage(festivalimages1, fest.name);
       const card = document.createElement("div");
       card.className = "festival-product-card";
       card.innerHTML = `
@@ -1238,14 +1238,14 @@ if (typeof window !== 'undefined') {
         return;
       }
       for (const p of products) {
-        const mapped = getImage(productImages, p.name);
+        const mapped = getImage(productimages1, p.name);
         const imageUrl = (mapped && !/placeholder\.png$/i.test(mapped))
           ? mapped
-          : (p.image_url || 'images/placeholder.png');
+          : (p.image_url || 'images1/placeholder.png');
         const card = document.createElement('div');
         card.className = 'product-card';
         card.innerHTML = `
-          <img src="${imageUrl}" alt="${p.name}" onerror="this.onerror=null;this.src='images/placeholder.png';">
+          <img src="${imageUrl}" alt="${p.name}" onerror="this.onerror=null;this.src='images1/placeholder.png';">
           <h3>${p.name}</h3>
           <p class="price">₹${p.price}</p>
           <div class="buttons">
@@ -1514,7 +1514,7 @@ if (typeof window !== 'undefined') {
           title: dataName,
           desc: btn.dataset?.description || 'No description available.',
           price: Number(btn.dataset?.price) || btn.dataset?.price || '',
-          imageUrl: btn.dataset?.image || 'images/placeholder.png'
+          imageUrl: btn.dataset?.image || 'images1/placeholder.png'
         });
         return;
       }
@@ -1528,7 +1528,7 @@ if (typeof window !== 'undefined') {
       }
       if (!supabase) {
         // Still show modal with minimal info if offline
-        const img = card.querySelector('img')?.getAttribute('src') || getImage(productImages, name);
+        const img = card.querySelector('img')?.getAttribute('src') || getImage(productimages1, name);
         const priceText = card.querySelector('.price')?.textContent || '';
         showModal({ title: name, desc: 'No description available.', price: priceText, imageUrl: img });
         return;
@@ -1548,8 +1548,8 @@ if (typeof window !== 'undefined') {
           return;
         }
         const desc = row.description || 'No description available.';
-        const mappedImg = getImage(productImages, row.name || name);
-        const img = (row.image_url) || mappedImg || 'images/placeholder.png';
+        const mappedImg = getImage(productimages1, row.name || name);
+        const img = (row.image_url) || mappedImg || 'images1/placeholder.png';
         showModal({ title: row.name || name, desc, price: row.price, imageUrl: img });
       } catch (err) {
         console.error('View details exception:', err);
@@ -1625,7 +1625,7 @@ if (typeof window !== 'undefined') {
             total += (Number(item.price) || 0) * (Number(item.qty) || 1);
             container.innerHTML += `
               <div class="cart-item">
-                <img src="${item.image || 'images/placeholder.png'}" alt="${item.name}">
+                <img src="${item.image || 'images1/placeholder.png'}" alt="${item.name}">
                 <div class="cart-info">
                   <h3>${item.name}</h3>
                   <p>₹${Number(item.price) || 0}</p>
@@ -1744,7 +1744,7 @@ async function loadFestivals() {
   container.innerHTML = "";
   data.forEach(fest => {
     // Always use local image mapping
-    const imageUrl = getImage(festivalImages, fest.name);
+    const imageUrl = getImage(festivalimages1, fest.name);
     container.innerHTML += `
       <div class="card" style="cursor:pointer" onclick="window.location.href='shop-fest-products.html?festival=${encodeURIComponent(fest.id)}'">
         <img src="${imageUrl}" alt="${fest.name}">
@@ -1834,7 +1834,7 @@ async function showProducts() {
 
   for (const product of products) {
     // Always use local image mapping
-    const imageUrl = getImage(productImages, product.name);
+    const imageUrl = getImage(productimages1, product.name);
     container.innerHTML += `
       <div class="product-card">
         <img src="${imageUrl}" alt="${product.name}">

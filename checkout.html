@@ -491,10 +491,10 @@
           const itemElement = document.createElement('div');
           itemElement.className = 'order-item';
           
-          const imageUrl = item.image || (typeof getImage === 'function' ? getImage(window.productImages || {}, item.name) : '') || 'images/placeholder.png';
+          const imageUrl = item.image || (typeof getImage === 'function' ? getImage(window.productimages1 || {}, item.name) : '') || 'images1/placeholder.png';
           
           itemElement.innerHTML = `
-            <img src="${imageUrl}" alt="${item.name}" onerror="this.onerror=null;this.src='images/placeholder.png';" />
+            <img src="${imageUrl}" alt="${item.name}" onerror="this.onerror=null;this.src='images1/placeholder.png';" />
             <div class="order-item-details">
               <div class="order-item-name">${item.name}</div>
               <div class="order-item-price">₹${price.toLocaleString('en-IN')}</div>

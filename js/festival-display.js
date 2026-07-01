@@ -108,12 +108,12 @@ function displayFestivalList(festivals, title = 'Popular Indian Festivals') {
   
   // Use existing festival-product-card CSS classes with traditional enhancements
   const festivalHtml = festivals.map(festival => {
-    const imageUrl = festivalImages[festival.name] || 'images/placeholder.png';
+    const imageUrl = festivalimages1[festival.name] || 'images1/placeholder.png';
     return `
       <div class="festival-product-card traditional-festival-card">
         <div class="festival-card-wrapper">
           <div class="festival-image-container">
-            <img src="${imageUrl}" alt="${festival.name}" onerror="this.onerror=null;this.src='images/placeholder.png';">
+            <img src="${imageUrl}" alt="${festival.name}" onerror="this.onerror=null;this.src='images1/placeholder.png';">
             <div class="festival-overlay"></div>
           </div>
           <div class="festival-content">
@@ -188,12 +188,12 @@ function displayNextMonthFestivals(festivals) {
   
   // Use existing festival-product-card CSS classes with traditional styling
   const festivalHtml = festivals.map(festival => {
-    const imageUrl = festivalImages[festival.name] || 'images/placeholder.png';
+    const imageUrl = festivalimages1[festival.name] || 'images1/placeholder.png';
     return `
       <div class="festival-product-card traditional-festival-card">
         <div class="festival-card-wrapper">
           <div class="festival-image-container">
-            <img src="${imageUrl}" alt="${festival.name}" onerror="this.onerror=null;this.src='images/placeholder.png';">
+            <img src="${imageUrl}" alt="${festival.name}" onerror="this.onerror=null;this.src='images1/placeholder.png';">
             <div class="festival-overlay"></div>
           </div>
           <div class="festival-content">
