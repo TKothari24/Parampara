@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Search Results - Parampara</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header>
+    <div class="navbar">
+      <a class="logo border" href="index.html">Parampara</a>
+      <div class="nav-search">
+        <select id="category" class="category-select">
+          <option value="All">All</option>
+          <option value="Fashion">Fashion</option>
+          <option value="Home & Kitchen">Home & Kitchen</option>
+          <option value="Arts & Crafts">Arts & Crafts</option>
+        </select>
+        <input type="text" id="searchInput" placeholder="Search for Product" class="search-bar border">
+        <div class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+      </div>
+      <div class="nav-links">
+        <a class="Home border" href="index.html"><p>Home</p></a>
+        <a class="Festival border" href="shop-fest.html"><p>Festival Specials</p></a>
+        <a class="Seller border" href="shop-state.html"><p>State Specials</p></a>
+        <a class="About border" href="about.html"><p>About Us</p></a>
+        <a class="Contact border" href="contact.html"><p>Contact Us</p></a>
+        <a class="cart border" href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+        <a class="Login border" href="login.html"><p>Login</p></a>
+        <a class="Signup border" href="signup.html"><p>Signup</p></a>
+        <div class="flex-spacer"></div>
+        <span id="userName"><i class="fa-regular fa-user"></i><span id="userNameText">username</span></span>
+        <a href="#" id="logoutBtn">Logout</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="section">
+    <h2>Search Results</h2>
+    <div id="productsContainer" class="card-grid product-grid"></div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <h3>Parampara</h3>
+        <p>Connecting authentic Indian artisans with the world.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
+
+

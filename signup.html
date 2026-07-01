@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup - Parampara</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <style>
+    #logoutBtn {
+      position: absolute;
+      top: 18px;
+      right: 32px;
+      background: #dc3545;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.6rem 1.3rem;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      z-index: 100;
+      display: none;
+    }
+    #logoutBtn.show { display: block; }
+    #userName {
+      position: absolute;
+      top: 18px;
+      right: 130px;
+      background: #f2f2f2;
+      color: #222;
+      border-radius: 8px;
+      padding: 0.45rem 0.75rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      display: none;
+      gap: 8px;
+      align-items: center;
+    }
+    #userName.show { display: inline-flex; }
+  </style>
+</head>
+<body>
+        <script>
+          // Navbar session toggle and logout handling
+          const logoutBtn = document.getElementById('logoutBtn');
+          const userNameEl = document.getElementById('userName');
+          const userNameTextEl = document.getElementById('userNameText');
+          async function checkSupabaseSession() {
+            if (!window.supabase) return;
+            const { data } = await window.supabase.auth.getSession();
+            if (data.session) {
+              logoutBtn?.classList.add('show');
+              const meta = data.session.user?.user_metadata || {};
+              const email = data.session.user?.email || '';
+              const name = meta.full_name || (email ? email.split('@')[0] : '');
+              if (userNameEl && userNameTextEl) {
+                userNameTextEl.textContent = name;
+                userNameEl.classList.add('show');
+              }
+              // Hide login/signup links if present
+              document.querySelector('a.Login.border')?.style && (document.querySelector('a.Login.border').style.display = 'none');
+              document.querySelector('a.Signup.border')?.style && (document.querySelector('a.Signup.border').style.display = 'none');
+            } else {
+              logoutBtn?.classList.remove('show');
+              userNameEl?.classList.remove('show');
+              const ll = document.querySelector('a.Login.border');
+              const sl = document.querySelector('a.Signup.border');
+              if (ll) ll.style.display = '';
+              if (sl) sl.style.display = '';
+            }
+          }
+          document.addEventListener('DOMContentLoaded', checkSupabaseSession);
+          logoutBtn?.addEventListener('click', async (e) => {
+            e.preventDefault();
+            if (window.supabase) {
+              await window.supabase.auth.signOut();
+              await checkSupabaseSession();
+            }
+            alert('Logged out!');
+            window.location.href = 'login.html';
+          });
+        </script>
+
+  <header>
+    <div class="navbar">
+      <a class="logo border" href="index.html">Parampara</a>
+      <div class="nav-links">
+  <a href="#" id="logoutBtn">Logout</a>
+  <span id="userName"><i class="fa-regular fa-user"></i><span id="userNameText">username</span></span>
+        <a class="Home border" href="index.html"><p>Home</p></a>
+        <a class="Festival border" href="shop-fest.html"><p>Festival Specials</p></a>
+        <a class="Seller border" href="shop-state.html"><p> State Specials</p></a>
+        <a class="About border" href="about.html"><p>About Us</p></a>
+        <a class="Contact border" href="contact.html"><p>Contact Us</p></a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Signup Form -->
+  <section class="section">
+    <h2>Create an Account</h2>
+    <form id="signupForm" class="auth-form">
+      <input type="text" placeholder="Full Name" required>
+      <input type="email" placeholder="Email" required>
+      <input type="password" placeholder="Password" required>
+      <input type="password" placeholder="Confirm Password" required>
+      <button type="submit">Sign Up</button>
+      <p>Already have an account? <a href="login.html">Login</a></p>
+    </form>
+  </section>
+
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="script.js"></script>
+</body>
+</html>

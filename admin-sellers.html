@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+    body {
+      background: linear-gradient(120deg, #fff8f2 0%, #ffe8d3 100%);
+      min-height: 100vh;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .admin-wrap {
+      box-shadow: 0 8px 36px 0 rgba(232,108,40,0.13), 0 1.5px 8px 0 rgba(181,9,9,0.07);
+      border: 2.5px solid #e6a676;
+      background: #fffef9;
+      margin-top: 60px;
+    }
+    .admin-wrap h2 {
+      font-size: 2.1rem;
+      color: #b50909;
+      letter-spacing: 0.02em;
+      margin-bottom: 0.5em;
+      text-align: center;
+      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    }
+    .admin-actions {
+      background: #fff7ed;
+      border: 1.5px solid #ffd390;
+      box-shadow: 0 2px 10px 0 rgba(232,108,40,0.06);
+    }
+    .admin-actions button, .admin-actions select {
+      background: linear-gradient(90deg, #ffe8d3 0%, #fff3e6 100%);
+      color: #b50909;
+      border: 2px solid #e6a676;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      box-shadow: 0 1px 6px 0 rgba(230,108,40,0.07);
+      transition: all 0.18s;
+    }
+    .admin-actions button:hover, .admin-actions select:focus {
+      background: #fff3e6;
+      color: #e86c28;
+      border: 2px solid #e86c28;
+      box-shadow: 0 2px 12px 0 rgba(232,108,40,0.13);
+      transform: translateY(-2px) scale(1.04);
+    }
+    .admin-table {
+      border: 2px solid #ffd390;
+      box-shadow: 0 4px 18px 0 rgba(232,108,40,0.09);
+      background: #fff;
+    }
+    .admin-table th {
+      background: linear-gradient(90deg, #fff3e6 0%, #ffe8d3 100%);
+      color: #b50909;
+      font-size: 1.12rem;
+      border-bottom: 2.5px solid #e6a676;
+      text-align: center;
+      padding-top: 18px;
+      padding-bottom: 18px;
+    }
+    .admin-table td {
+      text-align: center;
+      font-size: 1.01rem;
+      padding-top: 13px;
+      padding-bottom: 13px;
+    }
+    .admin-table tr:hover {
+      background: #fff3e6;
+      box-shadow: 0 2px 8px 0 rgba(232,108,40,0.07);
+      transform: scale(1.01);
+    }
+    .badge {
+      font-size: 1.01rem;
+      font-weight: 700;
+      border-radius: 18px;
+      padding: 5px 18px;
+      box-shadow: 0 1px 6px 0 rgba(230,108,40,0.07);
+      border-width: 2px;
+    }
+    .badge.ok {
+      background: #e1f7e6;
+      color: #127a2f;
+      border: 2px solid #34d399;
+    }
+    .badge.pending {
+      background: #fff3cd;
+      color: #9a6b00;
+      border: 2px solid #fde68a;
+    }
+    .note {
+      background: #fff3e6;
+      color: #e86c28;
+      border: 1.5px solid #e6a676;
+      font-size: 1.08rem;
+      font-weight: 600;
+      margin-bottom: 1.2em;
+      margin-top: 10px;
+      box-shadow: 0 1px 6px 0 rgba(230,108,40,0.07);
+      display: block;
+      text-align: center;
+    }
+    .approve-btn {
+      background: linear-gradient(90deg, #e86c28 0%, #b50909 100%);
+      color: #fff;
+      font-size: 1.01rem;
+      font-weight: 700;
+      border-radius: 8px;
+      border: none;
+      letter-spacing: 0.01em;
+      box-shadow: 0 1px 6px 0 rgba(232,108,40,0.10);
+      transition: background 0.18s, box-shadow 0.18s, transform 0.18s;
+      padding: 8px 22px;
+    }
+    .approve-btn:hover {
+      background: linear-gradient(90deg, #b50909 0%, #e86c28 100%);
+      color: #fff3e6;
+      box-shadow: 0 2px 12px 0 rgba(232,108,40,0.13);
+      transform: translateY(-2px) scale(1.04);
+    }
+  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Manage Sellers</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .admin-wrap {
+      max-width: 1100px;
+      margin: 48px auto;
+      padding: 32px 28px 40px 28px;
+      background: #fff8f2;
+      border-radius: 18px;
+      box-shadow: 0 6px 32px 0 rgba(232,108,40,0.10);
+      border: 2px solid #e6a676;
+    }
+    .admin-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin: 22px 0 26px 0;
+      background: #fff3e6;
+      padding: 12px 18px;
+      border-radius: 10px;
+      border: 1.5px solid #e6a676;
+      box-shadow: 0 1px 6px 0 rgba(232,108,40,0.07);
+    }
+    .admin-actions button, .admin-actions select {
+      padding: 8px 22px;
+      border-radius: 8px;
+      border: 2px solid #e6a676;
+      background: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #b50909;
+      transition: box-shadow 0.2s, border 0.2s, background 0.2s;
+      outline: none;
+      box-shadow: 0 1px 6px 0 rgba(230,108,40,0.07);
+    }
+    .admin-actions button:hover, .admin-actions select:focus {
+      border: 2px solid #e86c28;
+      background: #ffe8d3;
+      color: #e86c28;
+      box-shadow: 0 2px 10px 0 rgba(232,108,40,0.10);
+    }
+    .admin-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: #fff;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 18px 0 rgba(232,108,40,0.06);
+      margin-top: 16px;
+      border: 1.5px solid #e6a676;
+    }
+    .admin-table th, .admin-table td {
+      border-bottom: 1px solid #ffe8d3;
+      padding: 14px 12px;
+      text-align: left;
+      font-size: 1rem;
+    }
+    .admin-table th {
+      background: #fff3e6;
+      font-weight: 700;
+      color: #b50909;
+      font-size: 1.08rem;
+      letter-spacing: 0.01em;
+      border-bottom: 2px solid #e6a676;
+    }
+    .admin-table tr:last-child td {
+      border-bottom: none;
+    }
+    .admin-table tr:hover {
+      background: #fff8f2;
+      transition: background 0.2s;
+    }
+    .badge {
+      padding: 4px 14px;
+      border-radius: 16px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      display: inline-block;
+      box-shadow: 0 1px 6px 0 rgba(230,108,40,0.07);
+    }
+    .badge.ok {
+      background: #e1f7e6;
+      color: #127a2f;
+      border: 1.5px solid #34d399;
+    }
+    .badge.pending {
+      background: #fff3cd;
+      color: #9a6b00;
+      border: 1.5px solid #fde68a;
+    }
+    .muted {
+      color: #888;
+    }
+    .note {
+      font-size: 1rem;
+      color: #e86c28;
+      margin-top: 10px;
+      background: #fff3e6;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-weight: 500;
+      box-shadow: 0 1px 6px 0 rgba(230,108,40,0.07);
+      border: 1.5px solid #e6a676;
+    }
+    .subhead {
+      margin: 4px 0 10px 0;
+      color: #6b7280;
+      text-align: center;
+      font-size: 1.02rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s;
+      box-shadow: 0 1px 6px 0 rgba(232,108,40,0.10);
+      letter-spacing: 0.01em;
+    }
+    .approve-btn:hover {
+      background: #b50909;
+      color: #fff3e6;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="script.js"></script>
+</head>
+<body>
+  <div class="admin-wrap">
+    <h2>Admin Dashboard</h2>
+    <p class="subhead">Manage sellers and review user contact messages.</p>
+
+    <div id="gate" class="muted" style="margin:12px 0">Checking access…</div>
+
+    <div class="admin-actions">
+      <button id="tabSellers">Sellers</button>
+      <button id="tabMessages">Messages</button>
+      <button id="refreshBtn">Refresh</button>
+      <select id="filterSelect">
+        <option value="all">All</option>
+        <option value="pending">Pending</option>
+        <option value="approved">Approved</option>
+      </select>
+    </div>
+
+    <div id="list"></div>
+    <div id="messagesList" style="display:none"></div>
+  </div>
+
+  <script>
+    (function adminPage(){
+      // Fallback allowlist (used only if admins table check fails)
+      const ADMIN_EMAILS_FALLBACK = [
+        // Add your admin emails here as a temporary fallback
+        'firstparamparae@gmail.com'
+      ];
+      const gate = document.getElementById('gate');
+      const list = document.getElementById('list');
+      const messagesList = document.getElementById('messagesList');
+      const filterSelect = document.getElementById('filterSelect');
+      const tabSellers = document.getElementById('tabSellers');
+      const tabMessages = document.getElementById('tabMessages');
+
+      if (!window.supabase) {
+        gate.textContent = 'Supabase client not initialized.';
+        return;
+      }
+
+      async function requireAdmin() {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session?.user) {
+          gate.innerHTML = 'Please log in. <a href="login.html">Go to login</a>';
+          return null;
+        }
+        const uid = session.user.id;
+        try {
+          const { data: adminRow, error } = await supabase
+            .from('admins')
+            .select('user_id')
+            .eq('user_id', uid)
+            .maybeSingle();
+          if (error) throw error;
+          if (adminRow) {
+            gate.innerHTML = `<span class="badge ok">Admin</span> ${session.user.email || ''}`;
+            return session.user;
+          }
+          // No row: try fallback allowlist
+          const okFallback = ADMIN_EMAILS_FALLBACK.includes(session.user.email || '');
+          if (okFallback) {
+            gate.innerHTML = `<span class="badge ok">Admin (fallback)</span> ${session.user.email || ''}`;
+            return session.user;
+          }
+          gate.textContent = 'Access denied (not an admin).';
+          return null;
+        } catch (err) {
+          // On 500 or any error, allow fallback list
+          const okFallback = ADMIN_EMAILS_FALLBACK.includes(session.user.email || '');
+          if (okFallback) {
+            gate.innerHTML = `<span class="badge ok">Admin (fallback)</span> ${session.user.email || ''}`;
+            return session.user;
+          }
+          gate.textContent = 'Access check failed. Please configure admins table policy.';
+          return null;
+        }
+      }
+
+      function renderRows(rows){
+        if (!rows || rows.length === 0) {
+          list.innerHTML = '<p class="muted">No sellers found.</p>';
+          return;
+        }
+        const html = [`<table class="admin-table">
+          <thead>
+            <tr>
+              <th>Created</th>
+              <th>Shop Name</th>
+              <th>Email</th>
+              <th>User ID</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>`];
+        for (const r of rows) {
+          const badge = r.approved ? '<span class="badge ok">Approved</span>' : '<span class="badge pending">Pending</span>';
+          html.push(`<tr>
+            <td>${r.created_at ? new Date(r.created_at).toLocaleString() : ''}</td>
+            <td>${r.shop_name || ''}</td>
+            <td>${r.contact_email || ''}</td>
+            <td class="muted" style="font-family:monospace">${r.user_id}</td>
+            <td>${badge}</td>
+            <td>
+              <button class="approve-btn" data-id="${r.id}" data-approved="${r.approved ? '1' : '0'}">${r.approved ? 'Unapprove' : 'Approve'}</button>
+            </td>
+          </tr>`);
+        }
+        html.push('</tbody></table>');
+        list.innerHTML = html.join('');
+      }
+
+      function renderMessagesRows(rows){
+        if (!rows || rows.length === 0) {
+          messagesList.innerHTML = '<p class="muted">No messages yet.</p>';
+          return;
+        }
+        const html = [`<table class=\"admin-table\">
+          <thead>
+            <tr>
+              <th>Received</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>User ID</th>
+              <th>Message</th>
+            </tr>
+          </thead>
+          <tbody>`];
+        for (const r of rows) {
+          html.push(`<tr>
+            <td>${r.created_at ? new Date(r.created_at).toLocaleString() : ''}</td>
+            <td>${r.name || ''}</td>
+            <td>${r.email || ''}</td>
+            <td class=\"muted\" style=\"font-family:monospace\">${r.user_id || ''}</td>
+            <td style=\"max-width:420px; white-space:pre-wrap;\">${(r.message || '').replace(/</g,'&lt;')}</td>
+          </tr>`);
+        }
+        html.push('</tbody></table>');
+        messagesList.innerHTML = html.join('');
+      }
+
+      async function fetchRows(){
+        const f = filterSelect.value;
+        let query = supabase.from('sellers').select('id, user_id, shop_name, contact_email, approved, created_at').order('created_at', { ascending: false });
+        if (f === 'pending') query = query.eq('approved', false);
+        if (f === 'approved') query = query.eq('approved', true);
+        const { data, error } = await query;
+        if (error) {
+          list.innerHTML = `<p class="muted">Failed to load: ${error.message}</p>`;
+          return [];
+        }
+        renderRows(data || []);
+        return data || [];
+      }
+
+      async function fetchMessages(){
+        const { data, error } = await supabase
+          .from('contact_messages')
+          .select('id, created_at, user_id, name, email, message')
+          .order('created_at', { ascending: false });
+        if (error) {
+          messagesList.innerHTML = `<p class=\"muted\">Failed to load messages: ${error.message}</p>`;
+          return [];
+        }
+        renderMessagesRows(data || []);
+        return data || [];
+      }
+
+      async function toggleApprove(id, current){
+        const to = !current;
+        const { error } = await supabase.from('sellers').update({ approved: to }).eq('id', id);
+        if (error) {
+          alert('Update failed: ' + error.message);
+          return;
+        }
+        await fetchRows();
+      }
+
+      document.addEventListener('click', async (e) => {
+        const btn = e.target.closest('.approve-btn');
+        if (!btn) return;
+        const id = btn.getAttribute('data-id');
+        const approved = btn.getAttribute('data-approved') === '1';
+        await toggleApprove(id, approved);
+      });
+
+      document.getElementById('refreshBtn').addEventListener('click', async () => {
+        if (messagesList.style.display === 'none') {
+          await fetchRows();
+        } else {
+          await fetchMessages();
+        }
+      });
+      filterSelect.addEventListener('change', fetchRows);
+
+      tabSellers.addEventListener('click', async () => {
+        list.style.display = '';
+        messagesList.style.display = 'none';
+        filterSelect.style.display = '';
+        await fetchRows();
+      });
+      tabMessages.addEventListener('click', async () => {
+        list.style.display = 'none';
+        messagesList.style.display = '';
+        filterSelect.style.display = 'none';
+        await fetchMessages();
+      });
+
+      (async () => {
+        const user = await requireAdmin();
+        if (!user) return;
+        await fetchRows();
+      })();
+    })();
+  </script>
+</body>
+</html>

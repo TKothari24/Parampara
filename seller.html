@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Become a Seller - Parampara</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"/>
+  <!-- Supabase SDK (must load before script.js) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <style>
+    /* Scoped styles for Seller page only */
+    :root {
+      --seller-accent: #e86c28;
+      --seller-ink: #222;
+      --seller-muted: #6b7280;
+      --seller-card: #fff;
+      --seller-border: #f0e0cf;
+      --seller-cream: #ffeed3;
+    }
+
+    .seller-hero {
+      background: linear-gradient(180deg, #fffaf2, #fff);
+      padding: 48px 20px 24px;
+      text-align: center;
+    }
+    .seller-hero h2 { margin: 0 0 10px; font-size: clamp(26px, 3.6vw, 36px); color: var(--seller-ink); }
+    .seller-hero p { margin: 0 auto; color: var(--seller-muted); max-width: 760px; line-height: 1.6; }
+    .seller-badges { margin-top: 14px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .seller-badges span { background:#fff; border:1px solid var(--seller-border); padding:8px 12px; border-radius:999px; display:inline-flex; align-items:center; gap:8px; font-weight:700; transition: all .2s ease; }
+    .seller-badges span:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.06); border-color:#e6a676; }
+    .seller-badges i { color: var(--seller-accent); }
+
+    /* Decorative divider under hero */
+    .seller-divider { height: 12px; background: linear-gradient(90deg, #ffe8d3, #fff3e6, #ffe8d3); opacity: .9; margin: 0 auto; }
+
+    .seller-wrap { padding: 28px 20px; }
+    .seller-container { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 20px; }
+    @media (max-width: 960px){ .seller-container { grid-template-columns: 1fr; } }
+
+    .seller-card { background: var(--seller-card); border:1px solid var(--seller-border); border-radius: 14px; box-shadow:0 8px 22px rgba(0,0,0,0.06); transition: transform .18s ease, box-shadow .18s ease, border-color .2s; }
+    .seller-card:hover { transform: translateY(-3px); box-shadow: 0 14px 28px rgba(0,0,0,0.08); border-color:#e6a676; }
+    .seller-card .head { padding: 14px 18px; border-bottom:1px solid var(--seller-border); background: #fffaf2; font-weight: 800; color: #b50909; }
+    .seller-card .body { padding: 18px; }
+
+    /* Enhance existing form visually without changing logic */
+    .auth-form label { font-weight: 700; color:#333; }
+    .auth-form input, .auth-form select, .auth-form textarea { background:#fffdf9; }
+    .auth-form small { color: var(--seller-muted); display:block; margin-top: 6px; }
+    .auth-form button[type="submit"] { background: var(--seller-accent); box-shadow: 0 4px 12px rgba(232,108,40,.18); transition: transform .18s ease, box-shadow .18s ease; }
+    .auth-form button[type="submit"]:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(232,108,40,.22); }
+
+    /* Seller Authentication Section Styling */
+    .auth-section {
+      background: linear-gradient(135deg, #fff9f5 0%, #fff5eb 100%);
+      border: 2px solid #e86c28;
+      border-radius: 16px;
+      margin: 30px 0 20px;
+      padding: 24px;
+      position: relative;
+      box-shadow: 0 8px 24px rgba(232, 108, 40, 0.1);
+    }
+
+    .auth-section::before {
+      content: "🔒";
+      position: absolute;
+      top: -15px;
+      left: 20px;
+      background: #e86c28;
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      box-shadow: 0 4px 12px rgba(232, 108, 40, 0.3);
+    }
+
+    .auth-section h3 {
+      color: #e86c28;
+      margin: 0 0 20px 0;
+      font-size: 1.3em;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .auth-section h3::before {
+      content: "✓";
+      color: #28a745;
+      font-weight: bold;
+    }
+
+    .auth-field-group {
+      background: white;
+      border: 1px solid #f0e0cf;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      transition: all 0.2s ease;
+    }
+
+    .auth-field-group:hover {
+      border-color: #e86c28;
+      box-shadow: 0 4px 12px rgba(232, 108, 40, 0.08);
+    }
+
+    .auth-field-group label {
+      display: block;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 8px;
+      font-size: 0.95em;
+    }
+
+    .auth-field-group input,
+    .auth-field-group select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #f0e0cf;
+      border-radius: 8px;
+      background: #fffdf9;
+      font-size: 1em;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+    }
+
+    .auth-field-group input:focus,
+    .auth-field-group select:focus {
+      outline: none;
+      border-color: #e86c28;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(232, 108, 40, 0.1);
+    }
+
+    .auth-field-group input[type="file"] {
+      padding: 8px;
+      border-style: dashed;
+      background: #fefcfa;
+      cursor: pointer;
+    }
+
+    .auth-field-group input[type="file"]:hover {
+      background: #fff8f2;
+      border-color: #d45a1f;
+    }
+
+    .auth-field-group small {
+      color: var(--seller-muted);
+      display: block;
+      margin-top: 6px;
+      font-size: 0.85em;
+      line-height: 1.4;
+    }
+
+    .auth-field-group small::before {
+      content: "ℹ️";
+      margin-right: 4px;
+      font-size: 0.8em;
+    }
+
+    .auth-notice {
+      background: linear-gradient(135deg, #e8f5e8 0%, #f1f8e9 100%);
+      border: 1px solid #4caf50;
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 20px;
+      font-size: 0.9em;
+      color: #2e7d32;
+    }
+
+    .auth-notice::before {
+      content: "🛡️";
+      font-size: 1.2em;
+      margin-right: 8px;
+    }
+
+    .seller-steps { display:grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    @media (max-width: 760px){ .seller-steps { grid-template-columns:1fr; } }
+    .seller-step { border:1px dashed var(--seller-border); border-radius: 12px; padding: 14px; background:#fff; transition: transform .18s ease, box-shadow .18s ease; }
+    .seller-step:hover { transform: translateY(-2px); box-shadow: 0 10px 18px rgba(0,0,0,.06); }
+    .seller-step .num { width:28px; height:28px; border-radius:50%; background:#fff3ea; color:var(--seller-accent); display:grid; place-items:center; font-weight:800; margin-bottom:6px; }
+    .seller-step b { color: var(--seller-ink); }
+    .seller-step p { color: var(--seller-muted); margin: 6px 0 0; }
+
+    .seller-steps { display:grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    @media (max-width: 760px){ .seller-steps { grid-template-columns:1fr; } }
+    .seller-step { border:1px dashed var(--seller-border); border-radius: 12px; padding: 14px; background:#fff; transition: transform .18s ease, box-shadow .18s ease; }
+    .seller-step:hover { transform: translateY(-2px); box-shadow: 0 10px 18px rgba(0,0,0,.06); }
+    .seller-step .num { width:28px; height:28px; border-radius:50%; background:#fff3ea; color:var(--seller-accent); display:grid; place-items:center; font-weight:800; margin-bottom:6px; }
+    .seller-step b { color: var(--seller-ink); }
+    .seller-step p { color: var(--seller-muted); margin: 6px 0 0; }
+
+    .seller-list { margin: 8px 0 0 18px; color: var(--seller-muted); }
+    .seller-list li { margin: 6px 0; }
+
+    .seller-faq details { border:1px solid var(--seller-border); border-radius:10px; background:#fff; padding: 10px 12px; }
+    .seller-faq details + details { margin-top:10px; }
+    .seller-faq summary { cursor:pointer; font-weight: 700; color: var(--seller-ink); }
+    .seller-faq p { color: var(--seller-muted); margin: 8px 0 0; }
+
+    .seller-note { background:#fff8f2; border:1px solid var(--seller-border); border-radius: 10px; padding: 12px; color:#444; }
+    .seller-check { display:grid; grid-template-columns: 1fr; gap:8px; }
+    .seller-check .row { display:flex; align-items:center; gap:8px; }
+    .seller-check i { color: #1e8e3e; }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header>
+    <div class="navbar">
+      <div class="logo border">Parampara</div>
+      <div class="nav-links">
+        <a class="Home border" href="index.html"><p>Home</p></a>
+        <a class="Festival border" href="shop-fest.html"><p>Festival Specials</p></a>
+        <a class="Seller border" href="shop-state.html"><p> State Specials</p></a>
+        <a class="About border" href="about.html"><p>About Us</p></a>
+        <a class="Contact border" href="contact.html"><p>Contact Us</p></a>
+        <a class="cart border" href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+        <a class="Login border" href="login.html"><p>Login</p></a>
+        <a class="Signup border" href="signup.html"><p>Signup</p></a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Seller Hero -->
+  <section class="seller-hero">
+    <h2>Join Parampara as a Seller</h2>
+    <p>Share authentic crafts with culture‑loving customers. We review each application to keep quality high and help artisans succeed online.</p>
+    <div class="seller-badges">
+      <span><i class="fa-solid fa-shield-heart"></i> Fair & Transparent</span>
+      <span><i class="fa-solid fa-box"></i> Easy Product Uploads</span>
+      <span><i class="fa-solid fa-people-roof"></i> Community Support</span>
+    </div>
+  </section>
+  <div class="seller-divider"></div>
+
+  <!-- Become a Seller Form + Info -->
+  <section class="seller-wrap">
+    <div class="seller-container">
+      <div class="seller-card">
+        <div class="head">Application Form</div>
+        <div class="body">
+          <form id="sellerForm" class="auth-form">
+            <label for="full_name">Full Name</label>
+            <input id="full_name" name="full_name" type="text" placeholder="Enter your full name" required>
+            <small>As per your government ID.</small>
+
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="Enter your email" required>
+            <small>We’ll send application status and important updates here.</small>
+
+            <label for="phone_number">Phone Number</label>
+            <input id="phone_number" name="phone_number" type="tel" placeholder="+91 XXXXX XXXXX" required>
+            <small>Include country code for reliable contact.</small>
+
+            <label for="business_name">Business / Brand Name</label>
+            <input id="business_name" name="business_name" type="text" placeholder="Your shop or brand name" required>
+            <small>This will appear to customers after approval.</small>
+
+            <label for="category">Category of Products</label>
+            <select id="category" name="category" required>
+              <option value="">Select category</option>
+              <option>Handloom & Textiles</option>
+              <option>Jewelry</option>
+              <option>Home & Kitchen</option>
+              <option>Festival Items</option>
+              <option>Other Crafts</option>
+            </select>
+            <small>You can add multiple categories later from your dashboard.</small>
+
+            <label for="sample_images">Upload Sample Product Images</label>
+            <input id="sample_images" name="sample_images" type="file" multiple accept="image/*">
+            <small>Up to 5 images, max 5MB each. Prefer natural light, plain background.</small>
+
+            <label for="description">Short Description</label>
+            <textarea id="description" name="description" rows="4" placeholder="Tell us about your craft and products" required></textarea>
+            <small>Example: “Handloom cotton sarees with natural dyes, woven in Varanasi.”</small>
+            <!-- Seller Authentication Section -->
+            <div class="auth-section">
+              <h3>Seller Authentication / Verification</h3>
+
+              <div class="auth-field-group">
+                <label for="verification_type">Verification Type</label>
+                <select id="verification_type" name="verification_type" required>
+                  <option value="">Select verification type</option>
+                  <option value="Artisan">Artisan</option>
+                  <option value="Small Business (MSME)">Small Business (MSME)</option>
+                  <option value="Both">Both</option>
+                </select>
+                <small>Select the type of verification you have.</small>
+              </div>
+
+              <div class="auth-field-group">
+                <label for="government_id_number">Government ID Number</label>
+                <input id="government_id_number" name="government_id_number" type="text" placeholder="Enter your Artisan / Udyam ID number" required>
+                <small>Your unique identification number from the government certificate.</small>
+              </div>
+
+              <div class="auth-field-group">
+                <label for="artisan_card">Upload Artisan Identity Card (Pehchan Card)</label>
+                <input id="artisan_card" name="artisan_card" type="file" accept="image/*,.pdf" required>
+                <small>Upload your Artisan Identity Card. PDF or image format, max 5MB.</small>
+              </div>
+
+              <div class="auth-field-group">
+                <label for="msme_certificate">Upload MSME / Udyam Registration Certificate</label>
+                <input id="msme_certificate" name="msme_certificate" type="file" accept="image/*,.pdf" required>
+                <small>Upload your MSME or Udyam registration certificate. PDF or image format, max 5MB.</small>
+              </div>
+
+              <div class="auth-notice">
+                <strong>Security Notice:</strong> Your documents are encrypted and stored securely. We only use them for verification purposes and will never share them with third parties.
+              </div>
+            </div>
+            <button type="submit">Submit Application</button>
+          </form>
+        </div>
+      </div>
+
+      <aside class="seller-card">
+        <div class="head">Before You Apply</div>
+        <div class="body">
+          <div class="seller-steps" style="margin-bottom:12px;">
+            <div class="seller-step"><div class="num">1</div><b>Apply</b><p>Share basic details and sample photos.</p></div>
+            <div class="seller-step"><div class="num">2</div><b>Review</b><p>We verify authenticity and quality.</p></div>
+            <div class="seller-step"><div class="num">3</div><b>Start Selling</b><p>Get access to your dashboard.</p></div>
+          </div>
+          <div class="seller-check">
+            <div class="row"><i class="fa-solid fa-circle-check"></i> Traditional or handmade product line</div>
+            <div class="row"><i class="fa-solid fa-circle-check"></i> Clear product photos</div>
+            <div class="row"><i class="fa-solid fa-circle-check"></i> Valid email and phone number</div>
+          </div>
+          <div class="seller-note" style="margin-top:12px;">
+            Approval typically takes 1–3 business days. You’ll be notified by email.
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Helpful Info for new Sellers (non-functional, informational only) -->
+  <section class="seller-wrap" style="padding-top:6px;">
+    <div class="seller-container" style="grid-template-columns: 1fr 1fr;">
+      <div class="seller-card">
+        <div class="head">Photo & Listing Guidelines</div>
+        <div class="body">
+          <ul class="seller-list">
+            <li>Use bright, natural light and a clean background.</li>
+            <li>Show multiple angles and close‑ups of craftsmanship.</li>
+            <li>Use clear names and short descriptions highlighting tradition and materials.</li>
+            <li>Price realistically and add stock quantity to avoid cancellations.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="seller-card">
+        <div class="head">FAQs</div>
+        <div class="body seller-faq">
+          <details>
+            <summary>Is there any listing fee?</summary>
+            <p>No, applying and listing is free. Platform fees apply only on successful sales.</p>
+          </details>
+          <details>
+            <summary>What products are allowed?</summary>
+            <p>Handcrafted, traditional, regional, and festival‑related products that respect cultural authenticity.</p>
+          </details>
+          <details>
+            <summary>How long does approval take?</summary>
+            <p>Usually 1–3 working days, depending on review volume.</p>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+  <script>
+    // Bind seller form submit with Supabase auth + optional Storage uploads
+    (function bindSellerForm() {
+      const form = document.getElementById('sellerForm');
+      if (!form) return;
+
+      const BUCKET = 'seller-samples'; // Ensure this Storage bucket exists
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        try {
+          if (typeof supabase === 'undefined' || !supabase) {
+            alert('Supabase client not initialized.');
+            return;
+          }
+
+          // Require login
+          const { data: { session } } = await supabase.auth.getSession();
+          const user = session?.user;
+          if (!user) {
+            alert('Please log in to submit your seller application.');
+            window.location.href = 'login.html';
+            return;
+          }
+
+          // Quick connectivity preflight to catch CORS/network issues early
+          try {
+            await supabase.from('sellers').select('user_id', { head: true, count: 'exact' }).limit(1);
+          } catch (prefErr) {
+            console.error('Supabase connectivity preflight failed:', prefErr);
+            alert('Cannot reach Supabase (network/CORS). Make sure you are running via http://localhost or http://127.0.0.1 and that this origin is allowed in Supabase settings.');
+            return;
+          }
+
+          // Prevent duplicate applications: if a row exists for this user, show status and exit
+          try {
+            const { data: existing, error: exErr } = await supabase
+              .from('sellers')
+              .select('id, approved, shop_name')
+              .eq('user_id', user.id)
+              .maybeSingle();
+            if (exErr) throw exErr;
+            if (existing) {
+              const status = existing.approved ? 'Approved' : 'Pending approval';
+              alert(`You have already submitted an application for "${existing.shop_name || 'your shop'}".\nStatus: ${status}.`);
+              window.location.href = 'seller-success.html';
+              return;
+            }
+          } catch (dupChkErr) {
+            console.warn('Duplicate check failed (continuing):', dupChkErr);
+          }
+
+          // Collect form data
+          const fd = new FormData(form);
+          const full_name = (fd.get('full_name') || '').toString().trim();
+          const email = (fd.get('email') || '').toString().trim();
+          const phone_number = (fd.get('phone_number') || '').toString().trim();
+          const business_name = (fd.get('business_name') || '').toString().trim();
+          const shop_name = business_name; // table requires both; map the single input to both
+          const category = (fd.get('category') || '').toString().trim();
+          const description = (fd.get('description') || '').toString().trim();
+
+          if (!full_name || !email || !business_name) {
+            alert('Please fill in Full name, Email, and Business name.');
+            return;
+          }
+
+          // Upload images (optional)
+          const files = fd.getAll('sample_images').filter(f => f instanceof File && f.size > 0);
+          const imageUrls = [];
+
+          // Client-side validation: max 5 images, <= 5MB each, image/* only
+          const MAX_FILES = 5;
+          const MAX_MB = 5;
+          const safeFiles = files.slice(0, MAX_FILES).filter(f => f.type.startsWith('image/') && f.size <= MAX_MB * 1024 * 1024);
+          if (safeFiles.length === 0 && files.length > 0) {
+            alert('Images must be valid images and <= 5MB each.');
+            return;
+          }
+
+          if (safeFiles.length > 0) {
+            try {
+              const uploads = safeFiles.map(async (file, idx) => {
+                const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+                const path = `${user.id}/${Date.now()}_${idx}_${safe}`;
+                const { error: upErr } = await supabase.storage.from(BUCKET).upload(path, file, {
+                  cacheControl: '31536000', // 1 year for immutable assets
+                  upsert: true,
+                  contentType: file.type || 'application/octet-stream'
+                });
+                if (upErr) throw upErr;
+                const { data: pub } = supabase.storage.from(BUCKET).getPublicUrl(path);
+                if (pub?.publicUrl) imageUrls.push(pub.publicUrl);
+              });
+              await Promise.all(uploads);
+            } catch (uploadErr) {
+              console.error('Storage upload failed:', uploadErr);
+              alert('Image upload failed (network/CORS). Your application will be submitted without images.');
+            }
+          }
+
+          // Insert into sellers — your schema requires both shop_name and business_name NOT NULL
+          const payload = {
+            user_id: user.id,
+            shop_name,
+            business_name,
+            contact_email: email
+          };
+
+          let insertErrWrap = null;
+          try {
+            const { error: insertErr } = await supabase.from('sellers').insert(payload);
+            insertErrWrap = insertErr || null;
+          } catch (insExc) {
+            insertErrWrap = insExc;
+          }
+          if (insertErrWrap) {
+            console.error('Insert failed:', insertErrWrap);
+            const msg = insertErrWrap?.message || insertErrWrap?.error_description || String(insertErrWrap);
+            alert('Submitting your application failed: ' + msg);
+            return;
+          }
+
+          // Redirect on success
+          window.location.href = 'seller-success.html';
+        } catch (err) {
+          console.error('Seller application error:', err);
+          alert('Could not submit your application. Please try again.');
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

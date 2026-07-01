@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Account - Parampara</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="supabaseClient.js"></script>
+  <style>
+    :root { --brand:#b50909; --saffron:#e86c28; --cream:#fff8f2; --muted:#7a6b5a; }
+    .page-hero{ background:linear-gradient(180deg,#ffeed3,#fff8f2); border-bottom:1px solid #f3e2c4; padding:26px 20px; text-align:center; }
+    .page-hero h1{ margin:0; font-size:1.8rem; color:var(--brand); }
+    .page-hero .sub{ color:var(--muted); margin-top:6px; }
+    .account-wrap{ max-width:880px; margin:24px auto; padding:0 16px; }
+    #accountContainer{ background:#fffef9; border:1px solid #e6e3df; border-radius:12px; box-shadow:0 8px 24px rgba(17,24,39,.08); padding:18px; }
+    .profile-header{ display:flex; align-items:center; gap:16px; margin-bottom:10px; }
+    .avatar{ width:56px; height:56px; border-radius:50%; background:#ffe8d3; display:grid; place-items:center; color:#b86a2a; font-weight:800; border:2px solid #f3e2c4; }
+    .rows{ display:grid; gap:10px; }
+    .row{ display:flex; justify-content:space-between; border-bottom:1px dashed #e6e3df; padding:8px 0; }
+    .row:last-child{ border-bottom:none; }
+    .label{ color:#8a8f98; font-weight:600; }
+  </style>
+</head>
+<body>
+  <div class="page-hero">
+    <h1><i class="fa-regular fa-user"></i> My Account</h1>
+    <div class="sub">Manage your profile and see your info</div>
+  </div>
+  <header>
+    <div class="navbar">
+      <a class="logo border" href="index.html">Parampara</a>
+      <div class="nav-links">
+        <a class="Home border" href="index.html"><p>Home</p></a>
+        <a class="Festival border" href="shop-fest.html"><p> Festival Specials</p></a>
+        <a class="Seller border" href="shop-state.html"><p> State Specials</p></a>
+        <a class="About border" href="about.html"><p>About Us</p></a>
+        <a class="Contact border" href="contact.html"><p>Contact Us</p></a>
+        <a class="cart border" href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+        <div class="flex-spacer"></div>
+        <span id="userName"><i class="fa-regular fa-user"></i><span id="userNameText">username</span></span>
+        <a href="#" id="logoutBtn">Logout</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="section" id="accountPage">
+    <div class="account-wrap">
+      <div id="accountContainer"></div>
+      
+      <!-- Quick Links -->
+      <div style="background: #fffef9; border: 1px solid #e6e3df; border-radius: 12px; box-shadow: 0 8px 24px rgba(17,24,39,.08); padding: 18px; margin-top: 20px;">
+        <h3 style="margin-bottom: 15px; color: var(--brand);">Quick Actions</h3>
+        <div style="display: grid; gap: 10px;">
+          <a href="orders.html" style="display: flex; align-items: center; gap: 10px; padding: 12px; background: #f8f9fa; border-radius: 8px; text-decoration: none; color: #333; transition: background 0.3s;">
+            <i class="fa-solid fa-box" style="color: var(--brand);"></i>
+            <span>View My Orders</span>
+          </a>
+          <a href="cart.html" style="display: flex; align-items: center; gap: 10px; padding: 12px; background: #f8f9fa; border-radius: 8px; text-decoration: none; color: #333; transition: background 0.3s;">
+            <i class="fa-solid fa-cart-shopping" style="color: var(--brand);"></i>
+            <span>My Cart</span>
+          </a>
+          <a href="seller.html" style="display: flex; align-items: center; gap: 10px; padding: 12px; background: #f8f9fa; border-radius: 8px; text-decoration: none; color: #333; transition: background 0.3s;">
+            <i class="fa-solid fa-store" style="color: var(--brand);"></i>
+            <span>Become a Seller</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <h3>Parampara</h3>
+        <p>Connecting authentic Indian artisans with the world, preserving our rich cultural heritage through traditional crafts and festival celebrations.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="shop-fest.html">Festival Specials</a></li>
+          <li><a href="shop-state.html">State Specials </a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="seller.html">Become a Seller</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Customer Support</h4>
+        <ul>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Shipping Info</a></li>
+          <li><a href="#">Returns & Exchanges</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact Info</h4>
+        <ul>
+          <li><i class="fa-solid fa-envelope"></i> firstparampara@gmail.com</li>
+          <li><i class="fa-solid fa-phone"></i> +91 98765 43210</li>
+          <li><i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra, India</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Parampara. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    (async function renderAccountPage(){
+      const wrap = document.getElementById('accountContainer');
+      if (!wrap) return;
+      try {
+        const user = await getCurrentUser();
+        if (!user) {
+          wrap.innerHTML = '<div class="rows"><p>Please log in to view your account.</p></div>';
+          return;
+        }
+
+        const profileName = user.user_metadata?.full_name || (user.email ? user.email.split('@')[0] : 'User');
+        const initials = (profileName||'U').trim().split(/\s+/).map(s=>s[0]).slice(0,2).join('').toUpperCase();
+        const userEmail = user.email || 'Not set';
+
+        // load dynamic stats from DB
+        let cartCount = 0;
+        let ordersCount = 0;
+        try {
+          await supabaseInitPromise;
+          const { data: cartItems } = await supabase.from('cart_items').select('id').eq('user_id', user.id);
+          const { data: myOrders } = await supabase.from('orders').select('id').eq('buyer_user_id', user.id);
+          cartCount = Array.isArray(cartItems) ? cartItems.length : 0;
+          ordersCount = Array.isArray(myOrders) ? myOrders.length : 0;
+        } catch (_) {}
+
+        wrap.innerHTML = `
+          <div class="profile-header">
+            <div class="avatar">${initials}</div>
+            <div>
+              <h3 style="margin:0;color:#2f2f2f">${profileName}</h3>
+              <div style="color:#8a8f98">${userEmail}</div>
+            </div>
+          </div>
+          <div class="rows">
+            <div class="row"><span class="label">Full Name</span><span>${profileName}</span></div>
+            <div class="row"><span class="label">Email</span><span>${userEmail}</span></div>
+            <div class="row"><span class="label">User ID</span><span style="font-family:monospace">${user.id}</span></div>
+            <div class="row"><span class="label">Cart Items</span><span>${cartCount}</span></div>
+            <div class="row"><span class="label">Total Orders</span><span>${ordersCount}</span></div>
+            <div class="row"><span class="label">Role</span><span>${user.app_metadata?.role || 'customer'}</span></div>
+          </div>
+        `;
+      } catch (e) {
+        console.error('Account page error', e);
+        wrap.innerHTML = '<div class="rows"><p>Could not load account details.</p></div>';
+      }
+    })();
+  </script>
+</body>
+</html>

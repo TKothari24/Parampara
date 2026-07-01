@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Thank You - Parampara</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{ --brand:#b50909; --brand-700:#8a0707; }
+    body{ font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; background: linear-gradient(180deg,#faf9f6,#f4f1ec); }
+    .wrap{ max-width: 860px; margin: 64px auto; padding: 0 16px; }
+    .card{
+      background:#fff; border:1px solid #eee3df; border-radius:16px; padding:32px; text-align:center;
+      box-shadow:0 14px 34px rgba(17,24,39,.12);
+    }
+    .icon{ width:72px; height:72px; display:grid; place-items:center; margin:0 auto 14px; border-radius:999px; background:#ffe8ea; color:var(--brand); font-size:30px; }
+    h1{ margin:6px 0 6px; font-size:28px; letter-spacing:-.02em; color:#1f2937; }
+    .sub{ color:#6b7280; margin:0 0 18px; }
+    .summary{ margin: 14px auto 10px; color:#374151; }
+    .actions{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:18px; }
+    .btn-primary{
+      background: linear-gradient(180deg, var(--brand), var(--brand-700)); color:#fff; border:none; border-radius:10px;
+      padding:12px 22px; font-weight:700; cursor:pointer; box-shadow:0 8px 18px rgba(181,9,9,.25); text-decoration:none;
+    }
+    .btn-primary:hover{ filter:brightness(.96); }
+    .btn-ghost{ background:#fff6f6; color:var(--brand); border:1px solid #f0d3d3; border-radius:10px; padding:12px 18px; font-weight:700; text-decoration:none; }
+    .note{ font-size:13px; color:#6b7280; margin-top:14px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="navbar">
+      <a class="logo border" href="index.html">Parampara</a>
+      <div class="nav-links">
+        <a class="Home border" href="index.html"><p>Home</p></a>
+        <a class="Festival border" href="shop-fest.html"><p> Festival Specials</p></a>
+        <a class="Seller border" href="shop-state.html"><p> State Specials</p></a>
+        <a class="About border" href="about.html"><p>About Us</p></a>
+        <a class="Contact border" href="contact.html"><p>Contact Us</p></a>
+        <a class="cart border" href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+      </div>
+    </div>
+  </header>
+
+  <section class="wrap">
+    <div class="card">
+      <div class="icon"><i class="fa-solid fa-circle-check"></i></div>
+      <h1>Thank you for ordering!</h1>
+      <p class="sub">Your order has been received. We’ll send you updates soon.</p>
+      <div class="summary" id="orderSummaryText"></div>
+      <div class="actions">
+        <a class="btn-primary" href="index.html">Continue Shopping</a>
+        <a class="btn-ghost" href="shop-fest.html">Explore Festivals</a>
+      </div>
+      <div class="note">You can safely close this page or use the buttons above to continue.</div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-bottom">
+      <p>&copy; 2025 Parampara. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Lightweight summary from sessionStorage if available
+    try {
+      const raw = sessionStorage.getItem('checkoutData');
+      if (raw) {
+        const data = JSON.parse(raw);
+        const name = [data.firstName, data.lastName].filter(Boolean).join(' ');
+        const addr = [data.address, data.city, data.state, data.postalCode].filter(Boolean).join(', ');
+        const el = document.getElementById('orderSummaryText');
+        if (el) {
+          el.textContent = name ? `Order for ${name}${addr ? ' · ' + addr : ''}` : '';
+        }
+      }
+    } catch {}
+    // No auto-redirect
+  </script>
+</body>
+</html>

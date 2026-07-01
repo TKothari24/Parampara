@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Orders - Parampara</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <style>
+    :root {
+      --brand: #b50909;
+      --saffron: #e86c28;
+      --cream: #fff8f2;
+      --ink: #2b2b2b;
+      --muted: #6b7280;
+      --border: #e6a676;
+    }
+    .page-hero {
+      background: linear-gradient(180deg, #ffeed3 0%, #fff8f2 100%);
+      border-bottom: 1px solid #f3e2c4;
+      padding: 26px 20px;
+      text-align: center;
+    }
+    .page-hero h1{
+      margin:0;
+      font-size: 1.8rem;
+      color: var(--brand);
+      letter-spacing: 0.3px;
+    }
+    .page-hero .sub{ color:#7a6b5a; margin-top:6px; }
+    .orders-wrap{ max-width: 980px; margin: 24px auto; padding: 0 16px; }
+    #ordersContainer { display: grid; gap: 14px; }
+    .order-card{ background:#ffffff; border:1px solid #e7e3dd; border-radius:12px; box-shadow:0 8px 24px rgba(17,24,39,.06); padding:16px; }
+    .order-card h3 { display:flex; align-items:center; gap:8px; }
+    .status-badge{
+      padding: 3px 8px; border-radius: 999px; font-size: .8rem; font-weight:700;
+      background:#ffe8e9; color:#c62828; border:1px solid #ffc6c9;
+      text-transform: capitalize;
+    }
+    .order-items{ margin-top: 6px; }
+    .order-item{ display:flex; align-items:center; gap:12px; }
+    .order-item img{ width:68px; height:68px; border-radius:10px; object-fit:cover; border:1px solid #ece8e3; background:#fff; }
+    .order-item .info{ display:flex; flex-direction:column; flex:1; min-width:0; }
+    .order-item .name{ font-weight:600; color:#2f2f2f; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .order-item .meta{ color:#8a8f98; font-size:13px; }
+    .order-item .price{ font-weight:700; color:var(--saffron); margin-left:8px; white-space:nowrap; }
+    .empty-state{
+      background: var(--cream);
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      color: #7a6b5a;
+    }
+    .orders-actions{ text-align:center; margin-top: 10px; }
+    .orders-actions a{ display:inline-block; background:#ffa726; color:#fff; padding:10px 16px; border-radius:8px; text-decoration:none; }
+    @media (min-width: 720px){
+      #ordersContainer{ grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-hero">
+    <h1><i class="fa-solid fa-receipt"></i> My Orders</h1>
+    <div class="sub">All your previous purchases in one place</div>
+  </div>
+  <header>
+    <div class="navbar">
+      <a class="logo border" href="index.html">Parampara</a>
+      <div class="nav-links">
+        <a class="Home border" href="index.html"><p>Home</p></a>
+        <a class="Festival border" href="shop-fest.html"><p> Festival Specials</p></a>
+        <a class="Seller border" href="shop-state.html"><p> State Specials</p></a>
+        <a class="About border" href="about.html"><p>About Us</p></a>
+        <a class="Contact border" href="contact.html"><p>Contact Us</p></a>
+        <a class="cart border" href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+        <div class="flex-spacer"></div>
+        <span id="userName"><i class="fa-regular fa-user"></i><span id="userNameText">username</span></span>
+        <a href="#" id="logoutBtn">Logout</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="section" id="ordersPage">
+    <div class="orders-wrap">
+      <div id="ordersContainer"></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <h3>Parampara</h3>
+        <p>Connecting authentic Indian artisans with the world, preserving our rich cultural heritage through traditional crafts and festival celebrations.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="shop-fest.html">Festival Specials</a></li>
+          <li><a href="shop-state.html">State Specials </a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="seller.html">Become a Seller</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Customer Support</h4>
+        <ul>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Shipping Info</a></li>
+          <li><a href="#">Returns & Exchanges</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact Info</h4>
+        <ul>
+          <li><i class="fa-solid fa-envelope"></i> firstparampara@gmail.com</li>
+          <li><i class="fa-solid fa-phone"></i> +91 98765 43210</li>
+          <li><i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra, India</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Parampara. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    (async function renderOrdersPage(){
+      const container = document.getElementById('ordersContainer');
+      if (!container) return;
+      try {
+        const user = await getCurrentUser();
+        if (!user || !window.supabase) { container.innerHTML = '<div class="empty-state">Please log in to view your orders.</div>'; return; }
+        // Orders
+        const { data: orders, error } = await supabase
+          .from('orders')
+          .select('id, created_at, status, items_count, total_amount')
+          .eq('buyer_user_id', user.id)
+          .order('created_at', { ascending: false });
+        if (error) throw error;
+        const list = Array.isArray(orders) ? orders : [];
+        if (list.length === 0) { container.innerHTML = '<div class="empty-state"><p>No orders yet.</p><div class="orders-actions"><a href="shop-fest.html">Shop now</a></div></div>'; return; }
+        const ids = list.map(o => o.id);
+        const byOrder = new Map();
+        try {
+          const { data: items } = await supabase
+            .from('order_items')
+            .select('order_id, product_name, qty, price, image_url')
+            .in('order_id', ids);
+          (items||[]).forEach(it => { if (!byOrder.has(it.order_id)) byOrder.set(it.order_id, []); byOrder.get(it.order_id).push(it); });
+        } catch {}
+        container.innerHTML = '';
+        list.forEach(o => {
+          const when = new Date(o.created_at).toLocaleString();
+          const items = byOrder.get(o.id) || [];
+          const itemsHtml = items.map(it => {
+            const img = it.image_url || 'images/placeholder.png';
+            const qty = Number(it.qty)||1; const price = Number(it.price)||0;
+            return `
+              <div class="order-item">
+                <img src="${img}" alt="${it.product_name}" onerror="this.onerror=null;this.src='images/placeholder.png';" />
+                <div class="info">
+                  <div class="name">${it.product_name}</div>
+                  <div class="meta">Qty: ${qty}</div>
+                </div>
+                <div class="price">₹${(qty*price).toLocaleString('en-IN')}</div>
+              </div>`;
+          }).join('');
+          const card = document.createElement('div');
+          card.className = 'checkout-section order-card';
+          card.innerHTML = `
+            <h3 style="border:none;margin:0 0 8px 0">Order #${o.id.slice(0,8)} • <span class="status-badge">${o.status||'pending'}</span></h3>
+            <div class="order-summary">
+              <div class="summary-item"><span>Placed</span><span>${when}</span></div>
+              <div class="summary-item"><span>Items</span><span>${Number(o.items_count)||items.length}</span></div>
+              <div class="summary-total"><span>Total</span><span>₹${(Number(o.total_amount)||0).toLocaleString('en-IN')}</span></div>
+            </div>
+            <div class="order-items">${itemsHtml || '<div class="meta">No item details.</div>'}</div>
+          `;
+          container.appendChild(card);
+        });
+      } catch (e) {
+        console.error('Orders page error', e);
+        document.getElementById('ordersContainer').innerHTML = '<div class="empty-state">Could not load orders.</div>';
+      }
+    })();
+  </script>
+</body>
+</html>

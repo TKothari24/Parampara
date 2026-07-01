@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Checkout - Parampara</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"/>
+  <style>
+    .checkout-page {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 30px;
+    }
+
+    .checkout-main {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    .checkout-summary {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      height: fit-content;
+      position: sticky;
+      top: 20px;
+    }
+
+    .checkout-section {
+      margin-bottom: 30px;
+    }
+
+    .checkout-section h3 {
+      margin-bottom: 20px;
+      color: #b50909;
+      font-size: 20px;
+      border-bottom: 2px solid #f0f0f0;
+      padding-bottom: 10px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #b50909;
+    }
+
+    .payment-methods {
+      display: grid;
+      gap: 10px;
+    }
+
+    .payment-method {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .payment-method:hover {
+      border-color: #b50909;
+      background: #fff5f5;
+    }
+
+    .payment-method input[type="radio"] {
+      margin-right: 12px;
+      accent-color: #b50909;
+    }
+
+    .payment-method.selected {
+      border-color: #b50909;
+      background: #fff5f5;
+    }
+
+    .order-item {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .order-item:last-child {
+      border-bottom: none;
+    }
+
+    .order-item img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .order-item-details {
+      flex: 1;
+    }
+
+    .order-item-name {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .order-item-price {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .order-item-quantity {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      padding: 10px 0;
+    }
+
+    .summary-row.total {
+      border-top: 2px solid #f0f0f0;
+      font-weight: 700;
+      font-size: 18px;
+      color: #b50909;
+    }
+
+    .checkout-actions {
+      display: flex;
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .btn {
+      padding: 15px 30px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-primary {
+      background: #b50909;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #9f0808;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: #f0f0f0;
+      color: #333;
+    }
+
+    .btn-secondary:hover {
+      background: #e0e0e0;
+    }
+
+    .error-message {
+      color: #d32f2f;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    .success-message {
+      color: #2e7d32;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    @media (max-width: 968px) {
+      .checkout-page {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .checkout-summary {
+        position: static;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .checkout-page {
+        padding: 10px;
+      }
+
+      .checkout-main,
+      .checkout-summary {
+        padding: 20px;
+      }
+
+      .checkout-actions {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+  <!-- Navbar -->
+  <header>
+    <div class="navbar">
+      <a class="logo border" href="index.html">Parampara</a>
+      <div class="nav-links">
+        <a class="Home border" href="index.html"><p>Home</p></a>
+        <a class="Festival border" href="shop-fest.html"><p> Festival Specials</p></a>
+        <a class="Seller border" href="shop-state.html"><p> State Specials</p></a>
+        <a class="About border" href="about.html"><p>About Us</p></a>
+        <a class="Contact border" href="contact.html"><p>Contact Us</p></a>
+        <a class="cart border" href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Checkout Page -->
+  <section class="section">
+    <div class="checkout-page">
+      <div class="checkout-main">
+        <h2>Checkout</h2>
+        
+        <form id="checkout-form">
+          <!-- Contact Information -->
+          <div class="checkout-section">
+            <h3>Contact Information</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="firstName">First Name *</label>
+                <input type="text" id="firstName" name="firstName" required />
+                <span class="error-message" id="error-firstName"></span>
+              </div>
+              <div class="form-group">
+                <label for="lastName">Last Name *</label>
+                <input type="text" id="lastName" name="lastName" required />
+                <span class="error-message" id="error-lastName"></span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address *</label>
+              <input type="email" id="email" name="email" required />
+              <span class="error-message" id="error-email"></span>
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone Number *</label>
+              <input type="tel" id="phone" name="phone" placeholder="+91" required />
+              <span class="error-message" id="error-phone"></span>
+            </div>
+          </div>
+
+          <!-- Shipping Address -->
+          <div class="checkout-section">
+            <h3>Shipping Address</h3>
+            <div class="form-group full-width">
+              <label for="address">Street Address *</label>
+              <input type="text" id="address" name="address" required />
+              <span class="error-message" id="error-address"></span>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="city">City *</label>
+                <input type="text" id="city" name="city" required />
+                <span class="error-message" id="error-city"></span>
+              </div>
+              <div class="form-group">
+                <label for="state">State *</label>
+                <input type="text" id="state" name="state" required />
+                <span class="error-message" id="error-state"></span>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="postalCode">Postal Code *</label>
+                <input type="text" id="postalCode" name="postalCode" required />
+                <span class="error-message" id="error-postalCode"></span>
+              </div>
+              <div class="form-group">
+                <label for="country">Country *</label>
+                <input type="text" id="country" name="country" value="India" required />
+                <span class="error-message" id="error-country"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Method -->
+          <div class="checkout-section">
+            <h3>Payment Method</h3>
+            <div class="payment-methods">
+              <div class="payment-method selected">
+                <input type="radio" id="cod" name="paymentMethod" value="cod" checked />
+                <label for="cod">
+                  <i class="fa-solid fa-money-bill-wave"></i> Cash on Delivery
+                </label>
+              </div>
+              <div class="payment-method">
+                <input type="radio" id="upi" name="paymentMethod" value="upi" />
+                <label for="upi">
+                  <i class="fa-solid fa-mobile"></i> UPI Payment
+                </label>
+              </div>
+              <div class="payment-method">
+                <input type="radio" id="card" name="paymentMethod" value="card" />
+                <label for="card">
+                  <i class="fa-solid fa-credit-card"></i> Credit/Debit Card
+                </label>
+              </div>
+            </div>
+            <span class="error-message" id="error-paymentMethod"></span>
+          </div>
+
+          <!-- Order Notes -->
+          <div class="checkout-section">
+            <h3>Order Notes (Optional)</h3>
+            <div class="form-group">
+              <textarea id="orderNotes" name="orderNotes" rows="3" placeholder="Add any special instructions for your order..."></textarea>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="checkout-actions">
+            <button type="button" class="btn btn-secondary" onclick="window.location.href='cart.html'">
+              Back to Cart
+            </button>
+            <button type="submit" class="btn btn-primary">
+              Place Order
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="checkout-summary">
+        <h3>Order Summary</h3>
+        <div id="order-items"></div>
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span id="subtotal">₹0</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping</span>
+          <span id="shipping">₹0</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total</span>
+          <span id="total">₹0</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <h3>Parampara</h3>
+        <p>Connecting authentic Indian artisans with the world, preserving our rich cultural heritage through traditional crafts and festival celebrations.</p>
+        <div class="social-icons">
+          <a href="#"><i class="fa-brands fa-facebook"></i></a>
+          <a href="#"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="shop-fest.html">Festival Specials</a></li>
+          <li><a href="shop-state.html">State Specials </a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="seller.html">Become a Seller</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Customer Support</h4>
+        <ul>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Shipping Info</a></li>
+          <li><a href="#">Returns & Exchanges</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact Info</h4>
+        <ul>
+          <li><i class="fa-solid fa-envelope"></i> firstparampara@gmail.com</li>
+          <li><i class="fa-solid fa-phone"></i> +91 98765 43210</li>
+          <li><i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra, India</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Parampara. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="supabaseClient.js"></script>
+  <script src="script.js"></script>
+  <script>
+    // Initialize checkout page
+    const checkoutForm = document.getElementById('checkout-form');
+    const paymentMethods = document.querySelectorAll('.payment-method');
+
+    // Payment method selection
+    paymentMethods.forEach(method => {
+      method.addEventListener('click', function() {
+        paymentMethods.forEach(m => m.classList.remove('selected'));
+        this.classList.add('selected');
+        this.querySelector('input[type="radio"]').checked = true;
+      });
+    });
+
+    // Load cart items and display order summary
+    async function loadOrderSummary() {
+      try {
+        const { items } = await fetchCartItems();
+        let subtotal = 0;
+        const orderItemsContainer = document.getElementById('order-items');
+        
+        if (items.length === 0) {
+          orderItemsContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">Your cart is empty</p>';
+          document.getElementById('subtotal').textContent = '₹0';
+          document.getElementById('shipping').textContent = '₹0';
+          document.getElementById('total').textContent = '₹0';
+          return;
+        }
+
+        orderItemsContainer.innerHTML = '';
+        
+        items.forEach(item => {
+          const quantity = Number(item.qty) || 1;
+          const price = Number(item.price) || 0;
+          const itemTotal = price * quantity;
+          subtotal += itemTotal;
+
+          const itemElement = document.createElement('div');
+          itemElement.className = 'order-item';
+          
+          const imageUrl = item.image || (typeof getImage === 'function' ? getImage(window.productImages || {}, item.name) : '') || 'images/placeholder.png';
+          
+          itemElement.innerHTML = `
+            <img src="${imageUrl}" alt="${item.name}" onerror="this.onerror=null;this.src='images/placeholder.png';" />
+            <div class="order-item-details">
+              <div class="order-item-name">${item.name}</div>
+              <div class="order-item-price">₹${price.toLocaleString('en-IN')}</div>
+              <div class="order-item-quantity">Quantity: ${quantity}</div>
+            </div>
+          `;
+          
+          orderItemsContainer.appendChild(itemElement);
+        });
+
+        const shipping = subtotal > 1000 ? 0 : 50; // Free shipping over ₹1000
+        const total = subtotal + shipping;
+
+        document.getElementById('subtotal').textContent = `₹${subtotal.toLocaleString('en-IN')}`;
+        document.getElementById('shipping').textContent = shipping === 0 ? 'FREE' : `₹${shipping.toLocaleString('en-IN')}`;
+        document.getElementById('total').textContent = `₹${total.toLocaleString('en-IN')}`;
+      } catch (error) {
+        console.error('Error loading order summary:', error);
+        document.getElementById('order-items').innerHTML = '<p style="color: #d32f2f; text-align: center;">Error loading cart items</p>';
+      }
+    }
+
+    // Validate form
+    function validateForm() {
+      let isValid = true;
+      const formData = new FormData(checkoutForm);
+
+      // Clear previous errors
+      document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+
+      // Validate required fields
+      const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'address', 'city', 'state', 'postalCode', 'country'];
+      requiredFields.forEach(field => {
+        const value = formData.get(field);
+        const errorElement = document.getElementById(`error-${field}`);
+        if (!value || value.trim() === '') {
+          if (errorElement) {
+            errorElement.textContent = 'This field is required';
+            isValid = false;
+          }
+        }
+      });
+
+      // Email validation
+      const email = formData.get('email');
+      const emailError = document.getElementById('error-email');
+      if (email && !email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+        if (emailError) {
+          emailError.textContent = 'Please enter a valid email address';
+          isValid = false;
+        }
+      }
+
+      // Phone validation
+      const phone = formData.get('phone');
+      const phoneError = document.getElementById('error-phone');
+      if (phone && !phone.match(/^[\d\s\-\+]+$/)) {
+        if (phoneError) {
+          phoneError.textContent = 'Please enter a valid phone number';
+          isValid = false;
+        }
+      }
+
+      return isValid;
+    }
+
+    // Handle form submission
+    checkoutForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      if (!validateForm()) {
+        showToast('Please fill in all required fields correctly', 'error');
+        return;
+      }
+
+      try {
+        const formData = new FormData(checkoutForm);
+        const checkoutData = Object.fromEntries(formData);
+
+        // Store checkout data
+        sessionStorage.setItem('checkoutData', JSON.stringify(checkoutData));
+
+        // Place order
+        const orderCreated = await placeOrder();
+        if (!orderCreated) {
+          throw new Error('Order creation failed');
+        }
+
+        // Redirect after confirmed success (toast already shown from placeOrder)
+        setTimeout(() => {
+          window.location.href = 'thank-you.html';
+        }, 1500);
+      } catch (error) {
+        console.error('Checkout error:', error);
+        showToast('Error processing order. Please try again.', 'error');
+      }
+    });
+
+    // Load order summary on page load
+    document.addEventListener('DOMContentLoaded', loadOrderSummary);
+  </script>
+</body>
+</html>

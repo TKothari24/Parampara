@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auth Test - Parampara</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: 0 auto; }
+    .status { padding: 10px; margin: 10px 0; border-radius: 5px; }
+    .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+    button { padding: 10px 20px; margin: 5px; border: none; border-radius: 5px; cursor: pointer; background: #007bff; color: white; }
+    button:hover { background: #0056b3; }
+  </style>
+</head>
+<body>
+  <h1>Authentication Test</h1>
+  <div id="status"></div>
+  
+  <h2>Quick Login (Guest Account)</h2>
+  <button onclick="quickLogin()">Login as Guest</button>
+  <button onclick="checkAuth()">Check Authentication</button>
+  <button onclick="testCart()">Test Cart Access</button>
+  
+  <h2>Manual Login</h2>
+  <input type="email" id="email" placeholder="Email" value="shrutikrishna2624@gmail.com" style="width: 100%; padding: 8px; margin: 5px 0;">
+  <input type="password" id="password" placeholder="Password" value="snehal1234" style="width: 100%; padding: 8px; margin: 5px 0;">
+  <button onclick="login()">Login</button>
+  <button onclick="logout()">Logout</button>
+
+  <script src="supabaseClient.js"></script>
+  <script src="script.js"></script>
+  <script>
+    function showStatus(message, type = 'info') {
+      const statusDiv = document.getElementById('status');
+      statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+    }
+
+    async function checkAuth() {
+      try {
+        const user = await getCurrentUser();
+        if (user) {
+          showStatus(`✅ Authenticated as: ${user.email} (ID: ${user.id})`, 'success');
+        } else {
+          showStatus('❌ Not authenticated', 'error');
+        }
+      } catch (error) {
+        showStatus(`❌ Auth check failed: ${error.message}`, 'error');
+      }
+    }
+
+    async function quickLogin() {
+      try {
+        showStatus('🔄 Logging in as guest...', 'info');
+        await supabaseInitPromise;
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: 'shrutikrishna2624@gmail.com',
+          password: 'snehal1234'
+        });
+        
+        if (error) {
+          showStatus(`❌ Login failed: ${error.message}`, 'error');
+        } else {
+          showStatus(`✅ Logged in as: ${data.user.email}`, 'success');
+          setTimeout(checkAuth, 1000);
+        }
+      } catch (error) {
+        showStatus(`❌ Login error: ${error.message}`, 'error');
+      }
+    }
+
+    async function login() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      
+      try {
+        showStatus('🔄 Logging in...', 'info');
+        await supabaseInitPromise;
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password
+        });
+        
+        if (error) {
+          showStatus(`❌ Login failed: ${error.message}`, 'error');
+        } else {
+          showStatus(`✅ Logged in as: ${data.user.email}`, 'success');
+          setTimeout(checkAuth, 1000);
+        }
+      } catch (error) {
+        showStatus(`❌ Login error: ${error.message}`, 'error');
+      }
+    }
+
+    async function logout() {
+      try {
+        showStatus('🔄 Logging out...', 'info');
+        await supabaseInitPromise;
+        await supabase.auth.signOut();
+        showStatus('✅ Logged out successfully', 'success');
+        setTimeout(checkAuth, 1000);
+      } catch (error) {
+        showStatus(`❌ Logout error: ${error.message}`, 'error');
+      }
+    }
+
+    async function testCart() {
+      try {
+        showStatus('🔄 Testing cart access...', 'info');
+        const { items } = await fetchCartItems();
+        showStatus(`✅ Cart access successful! Found ${items.length} items in cart.`, 'success');
+        
+        if (items.length > 0) {
+          const itemsList = items.map(item => `${item.name} (₹${item.price} x ${item.qty})`).join(', ');
+          showStatus(`🛒 Cart items: ${itemsList}`, 'info');
+        }
+      } catch (error) {
+        showStatus(`❌ Cart test failed: ${error.message}`, 'error');
+      }
+    }
+
+    // Check auth on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(checkAuth, 1000);
+    });
+  </script>
+</body>
+</html>

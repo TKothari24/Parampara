@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Festival Calendar - Parampara</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+    <style>
+        .calendar-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+        
+        .calendar-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .calendar-header h1 {
+            color: #d63384;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .calendar-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        .month-selector {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .month-selector button {
+            background: #d63384;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+        
+        .month-selector button:hover {
+            background: #b02e5d;
+        }
+        
+        .current-month {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            min-width: 200px;
+            text-align: center;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: #ddd;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .calendar-day-header {
+            background: #d63384;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .calendar-day {
+            background: white;
+            min-height: 120px;
+            padding: 0.5rem;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .calendar-day:hover {
+            background: #f8f9fa;
+        }
+        
+        .calendar-day.other-month {
+            background: #f8f9fa;
+            color: #ccc;
+        }
+        
+        .calendar-day.today {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+        }
+        
+        .day-number {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+        
+        .festival-item {
+            font-size: 0.75rem;
+            background: #e8f5e8;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            margin-bottom: 0.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .festival-item:hover {
+            background: #d4edda;
+            transform: translateY(-1px);
+        }
+        
+        .festival-item.has-products {
+            background: #ffeaa7;
+            font-weight: bold;
+        }
+        
+        .festival-item.has-products:hover {
+            background: #fdcb6e;
+        }
+        
+        .festival-legend {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .festival-legend h3 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .legend-items {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+        }
+        
+        .festival-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        
+        .festival-modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .festival-modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .festival-modal h2 {
+            color: #d63384;
+            margin-bottom: 1rem;
+        }
+        
+        .festival-modal .date {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .festival-modal .description {
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        .festival-modal .products-link {
+            display: inline-block;
+            background: #d63384;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        
+        .festival-modal .products-link:hover {
+            background: #b02e5d;
+        }
+        
+        .upcoming-festivals {
+            margin-top: 3rem;
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 10px;
+        }
+        
+        .upcoming-festivals h2 {
+            color: #d63384;
+            margin-bottom: 1.5rem;
+        }
+        
+        .upcoming-list {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .upcoming-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 5px;
+            border-left: 4px solid #d63384;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .upcoming-item .festival-info h3 {
+            margin: 0 0 0.25rem 0;
+            color: #333;
+        }
+        
+        .upcoming-item .festival-info .date {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .upcoming-item .view-products {
+            background: #d63384;
+            color: white;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        
+        .upcoming-item .view-products:hover {
+            background: #b02e5d;
+        }
+        
+        .upcoming-item .view-products.no-products {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header>
+        <div class="navbar">
+            <a class="logo border" href="index.html">Parampara</a>
+            <div class="tagline">
+                <div class="line1"><p>Where Culture</p></div>
+                <div class="line2"><p>Meets Craft</p></div>
+            </div>
+
+            <!-- Nav Links -->
+            <div class="nav-links">
+                <a class="Home border" href="index.html"><p>Home</p></a>
+                <a class="Festival border" href="shop-fest.html"><p>Festival Specials</p></a>
+                <a class="Seller border" href="shop-state.html"><p>State Specials</p></a>
+                <a class="About border" href="about.html"><p>About Us</p></a>
+                <a class="Contact border" href="contact.html"><p>Contact Us</p></a>
+                <a class="cart border" href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+                <a class="Login border" href="login.html"><p>Login</p></a>
+                <a class="Signup border" href="signup.html"><p>Signup</p></a>
+                <div class="flex-spacer"></div>
+                <span id="userName"><i class="fa-regular fa-user"></i><span id="userNameText">username</span></span>
+                <a href="admin-sellers.html" class="role-pill role-admin">Admin</a>
+                <a href="#" id="logoutBtn">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Calendar Container -->
+    <div class="calendar-container">
+        <div class="calendar-header">
+            <h1>Indian Festival Calendar</h1>
+            <p>Explore festivals throughout the year and discover related traditional products</p>
+        </div>
+
+        <!-- Month Selector -->
+        <div class="month-selector">
+            <button onclick="previousMonth()"><i class="fa-solid fa-chevron-left"></i> Previous</button>
+            <div class="current-month" id="currentMonth">March 2026</div>
+            <button onclick="nextMonth()">Next <i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+
+        <!-- Calendar Grid -->
+        <div class="calendar-grid" id="calendarGrid">
+            <!-- Calendar will be generated here -->
+        </div>
+
+        <!-- Festival Legend -->
+        <div class="festival-legend">
+            <h3>Legend</h3>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #e8f5e8;"></div>
+                    <span>Festival</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #ffeaa7;"></div>
+                    <span>Festival with Products</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #fff3cd; border: 2px solid #ffc107;"></div>
+                    <span>Today</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upcoming Festivals -->
+        <div class="upcoming-festivals">
+            <h2>Upcoming Festivals</h2>
+            <div class="upcoming-list" id="upcomingList">
+                <!-- Upcoming festivals will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Festival Modal -->
+    <div class="festival-modal" id="festivalModal">
+        <div class="festival-modal-content">
+            <span class="festival-modal-close" onclick="closeFestivalModal()">&times;</span>
+            <h2 id="modalFestivalName"></h2>
+            <div class="date" id="modalDate"></div>
+            <div class="description" id="modalDescription"></div>
+            <a href="#" class="products-link" id="modalProductsLink">View Related Products</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>Parampara</h3>
+                <p>Connecting authentic Indian artisans with the world, preserving our rich cultural heritage through traditional crafts and festival celebrations.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="shop-fest.html"> Festival Specials</a></li>
+                    <li><a href="shop-state.html">State Specials</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="seller.html">Become a Seller</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Customer Support</h4>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Shipping Info</a></li>
+                    <li><a href="#">Returns & Exchanges</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Contact Info</h4>
+                <ul>
+                    <li><i class="fa-solid fa-envelope"></i> firstparampara@gmail.com </li>
+                    <li><i class="fa-solid fa-phone"></i> +91 98765 43210</li>
+                    <li><i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra, India</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Parampara. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Festival data with product links
+        const festivals = {
+            '2026-03-03': [
+                { name: 'Vasantha Purnima', id: 'vasantha-purnima-id', hasProducts: true, description: 'The full moon day in the Hindu month of Phalguna, marking the beginning of spring season.' },
+                { name: 'Maha Lakshmi Jayanti', id: 'maha-lakshmi-jayanti-id', hasProducts: true, description: 'Birth anniversary of Goddess Lakshmi, the deity of wealth and prosperity.' }
+            ],
+            '2026-03-04': [
+                { name: 'Holi', id: 'e4308c1a-7b78-4afd-b551-fb2da8567b65', hasProducts: true, description: 'The festival of colors, celebrating the victory of good over evil and arrival of spring.' }
+            ],
+            '2026-03-05': [
+                { name: 'Holi Bhai Dooj', id: 'holi-bhai-dooj-id', hasProducts: false, description: 'A day for brothers and sisters to celebrate their bond, similar to Bhai Dooj during Diwali.' }
+            ],
+            '2026-03-07': [
+                { name: 'Bhalachandra Sankashti', id: 'bhalachandra-sankashti-id', hasProducts: false, description: 'An auspicious day for Lord Ganesha worship, observed on the fourth day of waning moon.' }
+            ],
+            '2026-03-08': [
+                { name: 'International Women\'s Day', id: 'womens-day-id', hasProducts: true, description: 'Global day celebrating women\'s achievements and promoting gender equality.' }
+            ],
+            '2026-03-14': [
+                { name: 'Koradaiyan Nombu', id: 'koradaiyan-nombu-id', hasProducts: false, description: 'Tamil festival observed by married women for the well-being of their husbands.' }
+            ],
+            '2026-03-15': [
+                { name: 'Papamochani Ekadashi', id: 'papamochani-ekadashi-id', hasProducts: false, description: 'A sacred day for fasting and seeking forgiveness for sins.' }
+            ],
+            '2026-03-18': [
+                { name: 'Chaitra Amavasya', id: 'chaitra-amavasya-id', hasProducts: true, description: 'New moon day marking the beginning of the Hindu lunar month of Chaitra.' }
+            ],
+            '2026-03-19': [
+                { name: 'Gudi Padwa', id: '15c0d77e-723e-42a9-a3b0-96ea5cf7929e', hasProducts: true, description: 'Maharashtrian New Year, celebrated with the hoisting of Gudi (flag).' },
+                { name: 'Ugadi', id: 'ugadi-id', hasProducts: true, description: 'New Year\'s Day for people of Karnataka and Andhra Pradesh.' }
+            ],
+            '2026-03-20': [
+                { name: 'Cheti Chand', id: 'cheti-chand-id', hasProducts: true, description: 'Sindhi New Year, celebrating the birth of Jhulelal, their patron saint.' },
+                { name: 'Eid', id: 'ed89b997-231b-44c3-bd98-38ca94b614b7', hasProducts: true, description: 'Islamic festival marking the end of Ramadan, celebrated with prayers and feasting.' }
+            ],
+            '2026-03-21': [
+                { name: 'Matsya Jayanti', id: 'matsya-jayanti-id', hasProducts: false, description: 'Birth anniversary of Lord Vishnu\'s fish incarnation, Matsya.' }
+            ],
+            '2026-03-22': [
+                { name: 'Vasudeva Chaturthi', id: 'vasudeva-chaturthi-id', hasProducts: false, description: 'Observance dedicated to Lord Krishna\'s father, Vasudeva.' }
+            ],
+            '2026-03-23': [
+                { name: 'Lakshmi Panchami', id: 'lakshmi-panchami-id', hasProducts: true, description: 'Fifth day of Chaitra month, dedicated to Goddess Lakshmi worship.' }
+            ],
+            '2026-03-24': [
+                { name: 'Yamuna Chhath', id: 'yamuna-chhath-id', hasProducts: false, description: 'Festival dedicated to the Yamuna River, celebrated on the sixth day of Chaitra.' }
+            ],
+            '2026-03-27': [
+                { name: 'Rama Navami', id: 'rama-navami-id', hasProducts: true, description: 'Birth anniversary of Lord Rama, the seventh incarnation of Lord Vishnu.' }
+            ],
+            '2026-03-29': [
+                { name: 'Kamada Ekadashi', id: 'kamada-ekadashi-id', hasProducts: false, description: 'A sacred fasting day that fulfills all desires and removes sins.' }
+            ],
+            // Additional festivals for other months
+            '2026-01-14': [
+                { name: 'Makar Sankranti', id: 'makar-sankranti-id', hasProducts: true, description: 'Harvest festival marking the transition of the sun into Capricorn.' },
+                { name: 'Pongal', id: 'pongal-id', hasProducts: true, description: 'Tamil harvest festival thanking the Sun God for agricultural abundance.' }
+            ],
+            '2026-01-26': [
+                { name: 'Republic Day', id: 'republic-day-id', hasProducts: true, description: 'India\'s Republic Day celebrating the adoption of the Constitution.' }
+            ],
+            '2026-02-01': [
+                { name: 'Vasant Panchami', id: 'vasant-panchami-id', hasProducts: true, description: 'Festival marking the beginning of spring, dedicated to Goddess Saraswati.' }
+            ],
+            '2026-02-21': [
+                { name: 'Maha Shivaratri', id: 'maha-shivaratri-id', hasProducts: true, description: 'Great night of Lord Shiva, celebrated with fasting and night-long vigil.' }
+            ],
+            '2026-04-14': [
+                { name: 'Baisakhi', id: 'baisakhi-id', hasProducts: true, description: 'Punjabi harvest festival marking the Sikh New Year.' },
+                { name: 'Vishu', id: 'vishu-id', hasProducts: true, description: 'Malayalam New Year celebrated with traditional rituals.' }
+            ],
+            '2026-04-21': [
+                { name: 'Ram Navami', id: 'ram-navami-id', hasProducts: true, description: 'Birth anniversary of Lord Rama.' }
+            ],
+            '2026-05-01': [
+                { name: 'Maharashtra Day', id: 'maharashtra-day-id', hasProducts: true, description: 'Formation day of Maharashtra state.' },
+                { name: 'Gujarat Day', id: 'gujarat-day-id', hasProducts: true, description: 'Formation day of Gujarat state.' }
+            ],
+            '2026-08-15': [
+                { name: 'Independence Day', id: 'independence-day-id', hasProducts: true, description: 'India\'s Independence Day celebrating freedom from British rule.' }
+            ],
+            '2026-08-19': [
+                { name: 'Raksha Bandhan', id: 'raksha-bandhan-id', hasProducts: true, description: 'Festival celebrating the bond between brothers and sisters.' }
+            ],
+            '2026-08-31': [
+                { name: 'Janmashtami', id: 'janmashtami-id', hasProducts: true, description: 'Birth anniversary of Lord Krishna.' }
+            ],
+            '2026-09-07': [
+                { name: 'Ganesh Chaturthi', id: 'ganesh-chaturthi-id', hasProducts: true, description: 'Festival celebrating the birth of Lord Ganesha.' }
+            ],
+            '2026-10-02': [
+                { name: 'Gandhi Jayanti', id: 'gandhi-jayanti-id', hasProducts: true, description: 'Birth anniversary of Mahatma Gandhi.' }
+            ],
+            '2026-10-21': [
+                { name: 'Dussehra', id: 'dussehra-id', hasProducts: true, description: 'Celebrating the victory of Lord Rama over Ravana.' }
+            ],
+            '2026-11-01': [
+                { name: 'Diwali', id: 'diwali-id', hasProducts: true, description: 'Festival of lights celebrating the return of Lord Rama to Ayodhya.' }
+            ],
+            '2026-11-02': [
+                { name: 'Govardhan Puja', id: 'govardhan-puja-id', hasProducts: true, description: 'Worship of Lord Krishna and Govardhan Hill.' }
+            ],
+            '2026-11-03': [
+                { name: 'Bhai Dooj', id: 'bhai-dooj-id', hasProducts: true, description: 'Festival celebrating the bond between brothers and sisters.' }
+            ],
+            '2026-12-25': [
+                { name: 'Christmas', id: 'christmas-id', hasProducts: true, description: 'Christian festival celebrating the birth of Jesus Christ.' }
+            ]
+        };
+
+        let currentDate = new Date();
+        let currentMonth = currentDate.getMonth();
+        let currentYear = currentDate.getFullYear();
+
+        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                          'July', 'August', 'September', 'October', 'November', 'December'];
+
+        function generateCalendar(month, year) {
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const daysInPrevMonth = new Date(year, month, 0).getDate();
+            
+            const calendarGrid = document.getElementById('calendarGrid');
+            calendarGrid.innerHTML = '';
+
+            // Add day headers
+            const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            dayHeaders.forEach(day => {
+                const dayHeader = document.createElement('div');
+                dayHeader.className = 'calendar-day-header';
+                dayHeader.textContent = day;
+                calendarGrid.appendChild(dayHeader);
+            });
+
+            // Add previous month days
+            for (let i = firstDay - 1; i >= 0; i--) {
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'calendar-day other-month';
+                dayDiv.innerHTML = `<div class="day-number">${daysInPrevMonth - i}</div>`;
+                calendarGrid.appendChild(dayDiv);
+            }
+
+            // Add current month days
+            const today = new Date();
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'calendar-day';
+                
+                // Check if today
+                if (year === today.getFullYear() && 
+                    month === today.getMonth() && 
+                    day === today.getDate()) {
+                    dayDiv.classList.add('today');
+                }
+
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const dayFestivals = festivals[dateStr] || [];
+                
+                let dayContent = `<div class="day-number">${day}</div>`;
+                
+                dayFestivals.forEach((festival, index) => {
+                    const festivalClass = festival.hasProducts ? 'has-products' : '';
+                    if (festival.hasProducts) {
+                        dayContent += `<div class="festival-item ${festivalClass}" onclick="window.location.href='shop-fest-products.html?festival=${encodeURIComponent(festival.id)}'">${festival.name}</div>`;
+                    } else {
+                        dayContent += `<div class="festival-item ${festivalClass}" onclick="showFestivalDetails('${dateStr}', ${index})">${festival.name}</div>`;
+                    }
+                });
+                
+                dayDiv.innerHTML = dayContent;
+                calendarGrid.appendChild(dayDiv);
+            }
+
+            // Add next month days
+            const totalCells = calendarGrid.children.length - 7; // Subtract header row
+            const remainingCells = 35 - totalCells;
+            for (let day = 1; day <= remainingCells; day++) {
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'calendar-day other-month';
+                dayDiv.innerHTML = `<div class="day-number">${day}</div>`;
+                calendarGrid.appendChild(dayDiv);
+            }
+
+            // Update month display
+            document.getElementById('currentMonth').textContent = `${monthNames[month]} ${year}`;
+            
+            // Update upcoming festivals
+            updateUpcomingFestivals();
+        }
+
+        function previousMonth() {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            generateCalendar(currentMonth, currentYear);
+        }
+
+        function nextMonth() {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            generateCalendar(currentMonth, currentYear);
+        }
+
+        function showFestivalDetails(dateStr, festivalIndex) {
+            const festival = festivals[dateStr][festivalIndex];
+            const modal = document.getElementById('festivalModal');
+            
+            document.getElementById('modalFestivalName').textContent = festival.name;
+            document.getElementById('modalDate').textContent = formatDate(dateStr);
+            document.getElementById('modalDescription').textContent = festival.description;
+            
+            const productsLink = document.getElementById('modalProductsLink');
+            if (festival.hasProducts) {
+                productsLink.href = `shop-fest-products.html?festival=${encodeURIComponent(festival.id)}`;
+                productsLink.style.display = 'inline-block';
+            } else {
+                productsLink.style.display = 'none';
+            }
+            
+            modal.style.display = 'block';
+        }
+
+        function closeFestivalModal() {
+            document.getElementById('festivalModal').style.display = 'none';
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('en-US', options);
+        }
+
+        function updateUpcomingFestivals() {
+            const upcomingList = document.getElementById('upcomingList');
+            upcomingList.innerHTML = '';
+            
+            const today = new Date();
+            const upcomingFestivals = [];
+            
+            // Get festivals for next 30 days
+            for (let i = 0; i < 30; i++) {
+                const date = new Date(today);
+                date.setDate(today.getDate() + i);
+                const dateStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+                
+                if (festivals[dateStr]) {
+                    festivals[dateStr].forEach(festival => {
+                        upcomingFestivals.push({
+                            ...festival,
+                            date: new Date(dateStr)
+                        });
+                    });
+                }
+            }
+            
+            // Sort by date
+            upcomingFestivals.sort((a, b) => a.date - b.date);
+            
+            // Display first 5 upcoming festivals
+            upcomingFestivals.slice(0, 5).forEach(festival => {
+                const item = document.createElement('div');
+                item.className = 'upcoming-item';
+                
+                const festivalInfo = document.createElement('div');
+                festivalInfo.className = 'festival-info';
+                festivalInfo.innerHTML = `
+                    <h3>${festival.name}</h3>
+                    <div class="date">${formatDate(festival.date.toISOString().split('T')[0])}</div>
+                `;
+                
+                const productsLink = document.createElement('a');
+                productsLink.className = festival.hasProducts ? 'view-products' : 'view-products no-products';
+                productsLink.href = festival.hasProducts ? `shop-fest-products.html?festival=${encodeURIComponent(festival.id)}` : '#';
+                productsLink.textContent = festival.hasProducts ? 'View Products' : 'No Products';
+                
+                item.appendChild(festivalInfo);
+                item.appendChild(productsLink);
+                upcomingList.appendChild(item);
+            });
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('festivalModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Initialize calendar
+        generateCalendar(currentMonth, currentYear);
+    </script>
+</body>
+</html>

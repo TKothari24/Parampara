@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+      #logoutBtn {
+        background: #dc3545;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 0.45rem 0.95rem;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: none;
+      }
+      #logoutBtn.show { display: inline-block; }
+      
+      #userName {
+        background: #f2f2f2;
+        color: #222;
+        border-radius: 8px;
+        padding: 0.35rem 0.6rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        display: none;
+        gap: 8px;
+        align-items: center;
+      }
+      #userName.show { display: inline-flex; }
+    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Parampara - India's Heritage & Festivals</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"/>
+  <script src="https://unpkg.com/@supabase/supabase-js@2.39.7"></script>
+  <script>
+    // Simple Supabase test
+    window.addEventListener('DOMContentLoaded', function() {
+      console.log('=== SUPABASE DEBUG ===');
+      console.log('1. Window object has supabase:', !!window.supabase);
+      
+      if (window.supabase) {
+        console.log('2. Supabase object type:', typeof window.supabase);
+        console.log('3. Supabase object keys:', Object.keys(window.supabase));
+        console.log('4. createClient function:', typeof window.supabase.createClient);
+        
+        try {
+          const testClient = window.supabase.createClient(
+            'https://dtelpnugwnknweyirsmt.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0ZWxwbnVnd25rbndleWlyc210Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMDE2NjUsImV4cCI6MjA3Mzc3NzY2NX0.yTGm_dEpuWRCCJwn_LKuQoY2hf3iOelbte_GnuPP0go'
+          );
+          console.log('5. Test client created:', !!testClient);
+          console.log('6. Test client has from method:', typeof testClient.from);
+          console.log('7. Test client has auth:', !!testClient.auth);
+        } catch (error) {
+          console.error('8. Error creating test client:', error);
+        }
+      }
+      console.log('=== END DEBUG ===');
+    });
+  </script>
+  <script src="script.js" defer></script>
+  <script src="js/festival-display.js" defer></script>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header>
+    <div class="navbar">
+      <a class="logo border" href="index.html">Parampara</a>
+      <div class="tagline">
+        <div class="line1"><p>Where Culture</p></div>
+        <div class="line2"><p>Meets Craft</p></div>
+      </div>
+<!-- Search Bar -->
+<div class="nav-search">
+  <select id="category" class="category-select">
+    <option value="All">All</option>
+    <option value="Fashion">Fashion</option>
+    <option value="Home & Kitchen">Home & Kitchen</option>
+    <option value="Arts & Crafts">Arts & Crafts</option>
+  </select>
+  <input type="text" id="searchInput" placeholder="Search for Product" class="search-bar border">
+  <div class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+</div>
+
+<div id="productContainer">
+  <!-- Products will be rendered here dynamically -->
+</div>
+
+      </div>
+
+      <!-- Nav Links -->
+      <div class="nav-links">
+  <a class="Home border" href="index.html"><p>Home</p></a>
+  <a class="Festival border" href="shop-fest.html"><p>Festival Specials</p></a>
+  <a class="Seller border" href="shop-state.html"><p>State Specials</p></a>
+  <a class="About border" href="about.html"><p>About Us</p></a>
+  <a class="Contact border" href="contact.html"><p>Contact Us</p></a>
+  <a class="cart border" href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+  <a class="Calendar border" href="festival-calendar.html"><i class="fa-solid fa-calendar-days"></i></a>
+  <a class="Login border" href="login.html"><p>Login</p></a>
+  <a class="Signup border" href="signup.html"><p>Signup</p></a>
+  <div class="flex-spacer"></div>
+  <span id="userName"><i class="fa-regular fa-user"></i><span id="userNameText">username</span></span>
+  <!-- Role pill (example). Replace class based on actual role: role-admin | role-seller | role-seller-pending -->
+  <a href="admin-sellers.html" class="role-pill role-admin">Admin</a>
+  <a href="#" id="logoutBtn">Logout</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Banner -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Discover India's Rich Heritage</h1>
+      <p>Connect with authentic artisans and handcrafted treasures that tell stories of our timeless traditions.</p>
+      <div class="hero-buttons">
+        <div class="hero-button1">
+          <button onclick="window.location.href='shop-fest.html'">Festival Specials <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+        <div class="hero-button2">
+          <button onclick="window.location.href='seller.html'">Become a Seller <i class="fa-solid fa-receipt"></i></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Festival Highlights -->
+  <section class="section" id="festivalHighlights">
+    <h2>Festival Highlights</h2>
+    <div class="festival-products-grid" id="festivalHighlightsProducts">
+      <!-- Products will be loaded here by JS -->
+    </div>
+  </section>
+
+  
+
+  <!-- Shop by State -->
+  <section class="shop-state">
+    <h2>State Specials</h2>
+    <p>Explore unique crafts and traditions from different states of India.</p>
+   <div class="state-grid" id="stateCards">
+  <!-- States will load here -->
+</div>
+
+  </section>
+
+<!-- Featured Products -->
+<section class="section">
+  <h2>Featured Products</h2>
+  <div id="featured-products" class="card-grid product-grid">
+    <!-- Products dynamically loaded from Supabase -->
+    <!-- Example static card structure (JS will generate same) -->
+    <div class="product-card">
+      <img src="images/placeholder.png" alt="Sample Product">
+      <h3>Sample Product</h3>
+      <p class="price">₹999</p>
+      <div class="buttons">
+        <button class="details">View Details</button>
+        <button class="cart">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+  <!-- Featured Artisans -->
+  <section class="section artisans">
+    <h2>Featured Artisans</h2>
+    <p>Meet the talented craftspeople preserving India's rich cultural heritage.</p>
+
+    <div class="artisan-grid">
+      <div class="artisan-card">
+        <img src="kamala.jpg" alt="Kamala Devi">
+        <div class="artisan-info">
+          <h3>Kamala Devi</h3>
+          <p class="location"><i class="fa-solid fa-location-dot"></i> Uttar Pradesh</p>
+          <p class="rating"><i class="fa-solid fa-star"></i> 4.9</p>
+          <span class="tag">Banarasi Weaving</span>
+          <p class="desc">With 30 years of experience, Kamala creates exquisite Banarasi sarees using traditional techniques passed down through generations.</p>
+          <button class="see-btn">See Collection</button>
+        </div>
+      </div>
+
+      <div class="artisan-card">
+        <img src="ravi.jpg" alt="Ravi Kumar">
+        <div class="artisan-info">
+          <h3>Ravi Kumar</h3>
+          <p class="location"><i class="fa-solid fa-location-dot"></i> Rajasthan</p>
+          <p class="rating"><i class="fa-solid fa-star"></i> 4.8</p>
+          <span class="tag">Blue Pottery</span>
+          <p class="desc">Ravi specializes in Jaipur's famous blue pottery, creating beautiful decorative items with intricate patterns and vibrant colors.</p>
+          <button class="see-btn">See Collection</button>
+        </div>
+      </div>
+
+      <div class="artisan-card">
+        <img src="meera.jpg" alt="Meera Nair">
+        <div class="artisan-info">
+          <h3>Meera Nair</h3>
+          <p class="location"><i class="fa-solid fa-location-dot"></i> Kerala</p>
+          <p class="rating"><i class="fa-solid fa-star"></i> 4.9</p>
+          <span class="tag">Kasavu Weaving</span>
+          <p class="desc">Meera crafts traditional Kerala sarees with golden borders, preserving the art of handloom weaving in God's own country.</p>
+          <button class="see-btn">See Collection</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <h3>Parampara</h3>
+        <p>Connecting authentic Indian artisans with the world, preserving our rich cultural heritage through traditional crafts and festival celebrations.</p>
+        <div class="social-icons">
+          <a href="#"><i class="fa-brands fa-facebook"></i></a>
+          <a href="#"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="shop-fest.html"> Festival Specials</a></li>
+          <li><a href="shop-state.html">State Specials</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="seller.html">Become a Seller</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Customer Support</h4>
+        <ul>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Shipping Info</a></li>
+          <li><a href="#">Returns & Exchanges</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Contact Info</h4>
+        <ul>
+          <li><i class="fa-solid fa-envelope"></i> firstparampara@gmail.com </li>
+          <li><i class="fa-solid fa-phone"></i> +91 98765 43210</li>
+          <li><i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra, India</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2025 Parampara. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+
+<!-- Chatbot JavaScript (must be defined before HTML elements that call them) -->
+<script>
+// Chatbot JavaScript Functions
+function toggleChatbot() {
+    const popup = document.getElementById('chatbotPopup');
+    const toggle = document.querySelector('.chatbot-toggle .notification');
+    
+    if (popup.classList.contains('active')) {
+        popup.classList.remove('active');
+        toggle.style.display = 'block';
+    } else {
+        popup.classList.add('active');
+        toggle.style.display = 'none';
+    }
+}
+
+function sendMessage() {
+    const input = document.getElementById("userInput");
+    const chatbox = document.getElementById("chatbox");
+    const message = input.value.trim().toLowerCase();
+    
+    if (!message) return;
+    
+    // Add user message
+    addMessage(message, 'user');
+    input.value = '';
+    
+    // Generate bot response
+    setTimeout(() => {
+        const response = generateResponse(message);
+        addMessage(response, 'bot');
+    }, 1000);
+}
+
+function addMessage(text, sender) {
+    const chatbox = document.getElementById("chatbox");
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chat-message ${sender}`;
+    messageDiv.textContent = text;
+    
+    chatbox.appendChild(messageDiv);
+    chatbox.scrollTop = chatbox.scrollHeight;
+}
+
+function quickQuery(query) {
+    document.getElementById("userInput").value = query;
+    sendMessage();
+}
+
+function handleKeyPress(event) {
+    if (event.key === 'Enter') {
+        sendMessage();
+    }
+}
+
+function generateResponse(input) {
+    if (input.includes("diwali") || input.includes("deepavali")) {
+        return "🪔 Diwali - The Festival of Lights! Diwali celebrates the victory of light over darkness with diyas, sweets, and fireworks. Check our Diwali collection for traditional diyas, sweets, and decorations!";
+    }
+    
+    else if (input.includes("holi")) {
+        return "🌈 Holi - The Festival of Colors! Holi celebrates the arrival of spring with vibrant colors, water, and festive foods. Explore our organic colors and Holi sweets!";
+    }
+    
+    else if (input.includes("maharashtra") || input.includes("mumbai") || input.includes("pune")) {
+        return "🗺️ Maharashtra has rich festivals! Ganesh Chaturthi, Gudi Padwa, and Makar Sankranti are celebrated with great enthusiasm. Which festival interests you?";
+    }
+    
+    else if (input.includes("upcoming") || input.includes("next")) {
+        return "📅 Upcoming Festivals: March - Holi, April - Gudi Padwa, May - Buddha Purnima. Each has special traditions and products!";
+    }
+    
+    else if (input.includes("major") || input.includes("popular")) {
+        return "🎆 Major Indian Festivals: Diwali, Holi, Dussehra, Eid, Christmas. Each has unique crafts, sweets, and decorations!";
+    }
+    
+    else if (input.includes("product") || input.includes("buy") || input.includes("shop")) {
+        return "🛍️ I can help you find traditional festival products! We have diyas, colors, sweets, decorations, and crafts for every festival. Which festival are you shopping for?";
+    }
+    
+    else if (input.includes("tradition") || input.includes("custom") || input.includes("celebration")) {
+        return "🎭 Indian festivals have beautiful traditions! From lighting diyas for Diwali to playing with colors for Holi, each celebration has unique rituals and cultural significance.";
+    }
+    
+    else if (input.includes("help") || input.includes("menu")) {
+        return "🤖 I can help you with:\n• Festival information and traditions\n• Regional festivals by state\n• Traditional products and crafts\n• Upcoming celebrations\n\nTry asking about specific festivals!";
+    }
+    
+    else {
+        return "🤔 I'd love to help! Try asking about specific festivals (Diwali, Holi), regional celebrations, or traditional products. Type 'help' for more options!";
+    }
+}
+</script>
+
+<!-- Festival Chatbot Widget -->
+<div class="chatbot-widget">
+    <button class="chatbot-toggle" onclick="toggleChatbot()">
+        <i class="fa-solid fa-comments"></i>
+        <span class="notification">1</span>
+    </button>
+    
+    <div class="chatbot-popup" id="chatbotPopup">
+        <div class="chatbot-popup-header">
+            <h3><span class="status"></span> Festival Assistant</h3>
+            <button class="chatbot-popup-close" onclick="toggleChatbot()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="chatbot-popup-content" id="chatbox">
+            <div class="chat-message bot">
+                🎉 Welcome to Parampara's Festival Assistant! I can help you discover Indian festivals and related products. Ask me about specific festivals, regional celebrations, or traditional products!
+            </div>
+        </div>
+        
+        <div class="chatbot-quick-actions">
+            <button class="chatbot-quick-action" onclick="quickQuery('upcoming festivals')">📅 Upcoming</button>
+            <button class="chatbot-quick-action" onclick="quickQuery('diwali')">🪔 Diwali</button>
+            <button class="chatbot-quick-action" onclick="quickQuery('holi')">🌈 Holi</button>
+            <button class="chatbot-quick-action" onclick="quickQuery('maharashtra')">🗺️ Maharashtra</button>
+        </div>
+        
+        <div class="chatbot-popup-input">
+            <input type="text" id="userInput" placeholder="Ask about festivals..." onkeypress="handleKeyPress(event)" />
+            <button onclick="sendMessage()">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Chatbot Widget Styles - Enhanced */
+.chatbot-widget {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
+}
+
+.chatbot-toggle {
+    background: linear-gradient(135deg, #d63384, #e86c28);
+    color: white;
+    border: none;
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    box-shadow: 0 8px 32px rgba(214,51,132,0.3), 0 0 0 0 rgba(214,51,132,0.1);
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    position: relative;
+    animation: float 3s ease-in-out infinite;
+}
+
+.chatbot-toggle::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #ff6b6b, #ffd700, #d63384, #e86c28);
+    border-radius: 50%;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.chatbot-toggle:hover::before {
+    opacity: 0.7;
+}
+
+.chatbot-toggle:hover {
+    transform: scale(1.15) rotate(5deg);
+    box-shadow: 0 15px 35px rgba(214,51,132,0.4), 0 0 0 10px rgba(214,51,132,0.1);
+}
+
+.chatbot-toggle:active {
+    transform: scale(0.95);
+}
+
+.chatbot-toggle .notification {
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+    color: white;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    animation: pulse 2s infinite, bounce 1s infinite;
+    box-shadow: 0 4px 12px rgba(255,107,107,0.4);
+    border: 2px solid white;
+}
+
+.chatbot-popup {
+    position: absolute;
+    bottom: 85px;
+    right: 0;
+    width: 280px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.25), 0 0 0 0 rgba(214,51,132,0.1);
+    border: 1px solid rgba(214,51,132,0.1);
+    display: none;
+    animation: slideUpBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    max-height: 450px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+.chatbot-popup.active {
+    display: block;
+}
+
+.chatbot-popup-header {
+    background: linear-gradient(135deg, #d63384, #e86c28);
+    color: white;
+    padding: 0.8rem 1.2rem;
+    border-radius: 20px 20px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+}
+
+.chatbot-popup-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.8s ease;
+}
+
+.chatbot-popup-header:hover::before {
+    left: 100%;
+}
+
+.chatbot-popup-header h3 {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.chatbot-popup-header .status {
+    width: 8px;
+    height: 8px;
+    background: linear-gradient(135deg, #4caf50, #8bc34a);
+    border-radius: 50%;
+    animation: pulse 2s infinite, glow 2s infinite;
+    box-shadow: 0 0 8px rgba(76,175,80,0.5);
+}
+
+.chatbot-popup-close {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0.4rem;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chatbot-popup-close:hover {
+    background: rgba(255,255,255,0.3);
+    transform: rotate(90deg) scale(1.1);
+}
+
+.chatbot-popup-content {
+    height: 200px;
+    overflow-y: auto;
+    padding: 1.2rem;
+    background: linear-gradient(135deg, #fafafa, #f8f9fa);
+    position: relative;
+}
+
+.chatbot-popup-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chatbot-popup-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.chatbot-popup-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #d63384, #e86c28);
+    border-radius: 10px;
+}
+
+.chatbot-popup-input {
+    padding: 1rem;
+    background: linear-gradient(135deg, white, #fafafa);
+    border-top: 1px solid rgba(214,51,132,0.1);
+    display: flex;
+    gap: 0.75rem;
+    position: relative;
+}
+
+.chatbot-popup-input::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, #d63384, #e86c28, #d63384);
+    animation: shimmer 3s infinite;
+}
+
+.chatbot-popup-input input {
+    flex: 1;
+    padding: 0.6rem 0.8rem;
+    border: 2px solid rgba(214,51,132,0.1);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    outline: none;
+    transition: all 0.3s ease;
+    background: white;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.chatbot-popup-input input:focus {
+    border-color: #d63384;
+    box-shadow: 0 0 0 3px rgba(214,51,132,0.1), inset 0 2px 4px rgba(214,51,132,0.05);
+    transform: translateY(-1px);
+}
+
+.chatbot-popup-input input::placeholder {
+    color: #999;
+    font-style: italic;
+}
+
+.chatbot-popup-input button {
+    background: linear-gradient(135deg, #d63384, #e86c28);
+    color: white;
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(214,51,132,0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.chatbot-popup-input button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255,255,255,0.3);
+    border-radius: 50%;
+    transition: all 0.5s ease;
+    transform: translate(-50%, -50%);
+}
+
+.chatbot-popup-input button:hover::before {
+    width: 100%;
+    height: 100%;
+}
+
+.chatbot-popup-input button:hover {
+    background: linear-gradient(135deg, #e86c28, #d63384);
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 6px 16px rgba(214,51,132,0.4);
+}
+
+.chatbot-popup-input button:active {
+    transform: scale(0.95);
+}
+
+.chatbot-quick-actions {
+    padding: 0.8rem 1rem;
+    background: linear-gradient(135deg, #fff8f2, #fef5e7);
+    border-top: 1px solid rgba(214,51,132,0.1);
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    position: relative;
+}
+
+.chatbot-quick-actions::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(214,51,132,0.2), transparent);
+}
+
+.chatbot-quick-action {
+    background: linear-gradient(135deg, white, #fafafa);
+    border: 2px solid #d63384;
+    color: #d63384;
+    padding: 0.3rem 0.6rem;
+    border-radius: 15px;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.chatbot-quick-action::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(214,51,132,0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.chatbot-quick-action:hover {
+    background: linear-gradient(135deg, #d63384, #e86c28);
+    color: white;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 16px rgba(214,51,132,0.3);
+    border-color: #e86c28;
+}
+
+.chatbot-quick-action:hover::before {
+    left: 100%;
+}
+
+.chat-message {
+    margin-bottom: 1rem;
+    padding: 0.8rem 1rem;
+    border-radius: 18px;
+    max-width: 85%;
+    word-wrap: break-word;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    position: relative;
+    animation: messageSlide 0.5s ease-out;
+}
+
+.chat-message.user {
+    background: linear-gradient(135deg, #d63384, #e86c28);
+    color: white;
+    margin-left: auto;
+    border-bottom-right-radius: 6px;
+    box-shadow: 0 4px 12px rgba(214,51,132,0.2);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.chat-message.bot {
+    background: linear-gradient(135deg, white, #fafafa);
+    color: #333;
+    border: 1px solid rgba(214,51,132,0.1);
+    border-bottom-left-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.chat-message.bot::before {
+    content: '🤖';
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    background: linear-gradient(135deg, #d63384, #e86c28);
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    box-shadow: 0 2px 6px rgba(214,51,132,0.3);
+}
+
+.chat-message.user::before {
+    content: '👤';
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: linear-gradient(135deg, #e86c28, #d63384);
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    box-shadow: 0 2px 6px rgba(232,108,40,0.3);
+}
+
+/* Enhanced Animations */
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+@keyframes glow {
+    0%, 100% { box-shadow: 0 0 10px rgba(76,175,80,0.5); }
+    50% { box-shadow: 0 0 20px rgba(76,175,80,0.8); }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+@keyframes slideUpBounce {
+    0% { opacity: 0; transform: translateY(30px) scale(0.8); }
+    60% { opacity: 1; transform: translateY(-10px) scale(1.05); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes messageSlide {
+    from { opacity: 0; transform: translateY(20px) scale(0.9); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (max-width: 768px) {
+    .chatbot-widget {
+        bottom: 20px;
+        right: 20px;
+    }
+    
+    .chatbot-toggle {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+    
+    .chatbot-popup {
+        width: 250px;
+        right: -10px;
+    }
+}
+</style>
+
+<script src="./js/fetchvalues.js">
+
+  // Real-time search
+const searchInput = document.getElementById('homeSearch');
+const productGrid = document.getElementById('featured-products');
+const productCards = productGrid.querySelectorAll('.product-card');
+
+searchInput.addEventListener('input', () => {
+  const query = searchInput.value.toLowerCase();
+
+  productCards.forEach(card => {
+    const productName = card.dataset.name.toLowerCase();
+    if (productName.includes(query)) {
+      card.style.display = 'block';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+});
+
+
+</script>
+
+
+</body>
+</html>

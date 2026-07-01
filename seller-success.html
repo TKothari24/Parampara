@@ -1,0 +1,59 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Application Submitted - Parampara</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Supabase SDK + shared app script -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="script.js"></script>
+</head>
+<body>
+  <section class="section">
+    <h2>Thank You!</h2>
+    <p>Your seller application has been submitted successfully. Our team will review your details and get back to you shortly.</p>
+    <div id="sellerStatus" style="margin:16px 0;color:#444"></div>
+    <button onclick="window.location.href='index.html'">Return to Home</button>
+  </section>
+  <script>
+    (async function showSellerStatus(){
+      try {
+        if (!window.supabase) return;
+        // Reuse Supabase client from script.js if present; otherwise create a minimal one.
+        const sb = (typeof supabase !== 'undefined' && supabase.auth) ? supabase : null;
+        if (!sb) return;
+        const statusEl = document.getElementById('sellerStatus');
+        if (!statusEl) return;
+        const { data: { session } } = await sb.auth.getSession();
+        if (!session?.user) {
+          statusEl.textContent = 'Please log in to view your application status.';
+          return;
+        }
+        const { data, error } = await sb
+          .from('sellers')
+          .select('shop_name, approved, created_at')
+          .eq('user_id', session.user.id)
+          .maybeSingle();
+        if (error) {
+          statusEl.textContent = 'Could not load your application status right now.';
+          return;
+        }
+        if (!data) {
+          statusEl.textContent = 'No application found for your account.';
+          return;
+        }
+        const state = data.approved ? 'Approved' : 'Pending approval';
+        statusEl.innerHTML = `
+          <strong>Status:</strong> ${state}<br/>
+          <strong>Shop:</strong> ${data.shop_name || '-'}<br/>
+          <strong>Submitted:</strong> ${new Date(data.created_at).toLocaleString()}
+        `;
+      } catch (e) {
+        // Silent fail for now
+      }
+    })();
+  </script>
+</body>
+</html>

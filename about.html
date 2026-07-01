@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Us - Parampara</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <style>
+    /* ========== Scoped styles for About page only ========== */
+    :root {
+      --about-accent: #e86c28; /* theme saffron from style.css */
+      --about-bg: #ffeed3;     /* warm cream from site sections */
+      --about-ink: #222;
+      --about-muted: #6b7280;
+      --about-card: #ffffff;
+      --about-border: #f0e7de;
+      --about-gradient: radial-gradient(1200px 400px at 10% -10%, #ffe8d3 0%, transparent 60%),
+                        radial-gradient(1200px 400px at 110% 10%, #ffe8d3 0%, transparent 60%),
+                        linear-gradient(180deg, #fffaf5 0%, #fff 100%);
+    }
+
+    .about-hero {
+      background: var(--about-gradient);
+      padding: 72px 20px 48px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-hero h1 {
+      font-size: clamp(28px, 4vw, 44px);
+      color: var(--about-ink);
+      letter-spacing: 0.3px;
+      margin-bottom: 12px;
+    }
+    .about-hero p {
+      color: var(--about-muted);
+      max-width: 820px;
+      margin: 0 auto 22px;
+      line-height: 1.65;
+      font-size: 1.05rem;
+    }
+    .about-badges {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    .about-badges span {
+      background: var(--about-card);
+      border: 1px solid var(--about-border);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-weight: 600;
+      color: var(--about-ink);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .about-badges i { color: var(--about-accent); }
+
+    .about-section {
+      padding: 40px 20px;
+      background: #fff;
+    }
+    .about-container {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+    .about-grid-2 {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 28px;
+    }
+    @media (max-width: 900px) {
+      .about-grid-2 { grid-template-columns: 1fr; }
+    }
+
+    .about-card {
+      background: var(--about-card);
+      border: 1px solid var(--about-border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: 0 10px 22px rgba(0,0,0,0.04);
+    }
+    .about-card h3 { margin: 0 0 10px; }
+    .about-card p { color: var(--about-muted); line-height: 1.7; }
+
+    .about-pills {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 14px;
+    }
+    @media (max-width: 700px) {
+      .about-pills { grid-template-columns: 1fr; }
+    }
+    .about-pill {
+      background: #fffaf5;
+      border: 1px dashed var(--about-border);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .about-pill i { color: var(--about-accent); margin-top: 3px; }
+    .about-pill b { color: var(--about-ink); }
+    .about-pill span { color: var(--about-muted); }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 22px;
+    }
+    @media (max-width: 900px) { .about-stats { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px) { .about-stats { grid-template-columns: 1fr; } }
+    .about-stat {
+      background: var(--about-card);
+      border: 1px solid var(--about-border);
+      border-radius: 12px;
+      padding: 18px;
+      text-align: center;
+    }
+    .about-stat h4 { font-size: 28px; color: var(--about-accent); margin: 4px 0; }
+    .about-stat small { color: var(--about-muted); }
+
+    .about-offers {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    @media (max-width: 900px) { .about-offers { grid-template-columns: 1fr; } }
+    .about-offer {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--about-border);
+      background: #fff;
+    }
+    .about-offer .body { padding: 18px; }
+    .about-offer h3 { margin: 0 0 8px; }
+    .about-offer p { color: var(--about-muted); }
+    .about-offer .tag { color: #fff; background: var(--about-accent); display: inline-block; padding: 6px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+    .about-offer .media {
+      background: var(--about-bg);
+      height: 180px;
+      display: grid;
+      place-items: center;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-offer .media::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(0deg, rgba(0,0,0,0.22), rgba(0,0,0,0.05));
+    }
+    .about-offer .media .tag { position: relative; z-index: 1; }
+
+    .about-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    @media (max-width: 900px) { .about-steps { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 520px) { .about-steps { grid-template-columns: 1fr; } }
+    .about-step { background: var(--about-card); border: 1px solid var(--about-border); border-radius: 12px; padding: 16px; }
+    .about-step .num { width: 30px; height: 30px; border-radius: 50%; background: #fff3ea; color: var(--about-accent); display: grid; place-items: center; font-weight: 800; margin-bottom: 8px; }
+
+    .about-testimonials { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 900px) { .about-testimonials { grid-template-columns: 1fr; } }
+    .about-quote { background: var(--about-card); border: 1px solid var(--about-border); border-radius: 12px; padding: 18px; }
+    .about-quote p { color: var(--about-muted); margin: 8px 0 6px; }
+    .about-quote .meta { color: #374151; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+    .about-quote .meta i { color: var(--about-accent); }
+
+    .about-cta { text-align: center; padding: 28px; border: 1px solid var(--about-border); background: #fffaf5; border-radius: 14px; }
+    .about-cta h3 { margin: 0 0 10px; }
+    .about-cta p { margin: 0 0 16px; color: var(--about-muted); }
+    .about-cta .btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--about-accent); color: #fff; border: 0; border-radius: 10px; padding: 10px 16px; font-weight: 700; cursor: pointer;
+    }
+    .about-cta .btn:hover { filter: brightness(0.95); }
+    /* Simple list spacing */
+    .about-list { margin: 10px 0 0 18px; color: var(--about-muted); }
+    .about-list li { margin: 6px 0; }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header>
+    <div class="navbar">
+      <a class="logo border" href="index.html">Parampara</a>
+      <div class="tagline">
+        <div class="line1"><p>Where Culture</p></div>
+        <div class="line2"><p>Meets Craft</p></div>
+      </div>
+      <div class="nav-search">
+        <select id="category" class="category-select">
+          <option value="All">All</option>
+          <option value="Fashion">Fashion</option>
+          <option value="Home & Kitchen">Home & Kitchen</option>
+          <option value="Arts & Crafts">Arts & Crafts</option>
+        </select>
+        <input type="text" placeholder=" Search for Product" class="search-bar border">
+        <div class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+      </div>
+      <div class="nav-links">
+        <a class="Home border" href="index.html"><p>Home</p></a>
+        <a class="Festival border" href="shop-fest.html"><p>Festival Specials</p></a>
+        <a class="Seller border" href="shop-state.html"><p> State Specials</p></a>
+        <a class="About border active" href="about.html"><p>About Us</p></a>
+        <a class="Contact border" href="contact.html"><p>Contact Us</p></a>
+        <a class="cart border" href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+        <div class="flex-spacer"></div>
+        <a href="#" id="logoutBtn">Logout</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- About: Hero -->
+  <section class="about-hero">
+    <div class="about-container">
+      <h1>Celebrating India’s Heritage, One Craft at a Time</h1>
+      <p>
+        Parampara connects you directly with Indian artisans through curated festival and regional collections —
+        making cultural knowledge easier to access for younger generations and giving local makers a fair digital showcase.
+        Discover authentic crafts, support livelihoods, and bring home stories woven over centuries.
+      </p>
+      <div class="about-badges">
+        <span><i class="fa-solid fa-hand-sparkles"></i> 100% Authentic Crafts</span>
+        <span><i class="fa-solid fa-seedling"></i> Sustainable & Ethical</span>
+      </div>
+    </div>
+  </section>
+
+  
+
+  <!-- Mission and Pillars -->
+  <section class="about-section">
+    <div class="about-container about-grid-2">
+      <div class="about-card">
+        <h3>Our Mission</h3>
+        <p>
+          To preserve India’s living traditions by empowering artisans and giving you access to authentic,
+          beautifully crafted products. We highlight regional specialties through Festival Specials and State
+          Specials, keeping culture accessible and thriving.
+        </p>
+        <p style="color: var(--about-muted)">
+          As modernization accelerates, customs risk fading and authentic goods are often replaced by mass‑market
+          alternatives. Cultural knowledge remains scattered and hard to navigate, while many artisans — skilled in
+          crafts, weaving, painting, crochet, and traditional foods — struggle to reach large platforms. Parampara
+          brings these threads together into one place that blends culture, learning, and authentic commerce so
+          heritage isn’t lost amidst change.
+        </p>
+      </div>
+      <div class="about-card">
+        <h3>Our Pillars</h3>
+        <div class="about-pills">
+          <div class="about-pill">
+            <i class="fa-solid fa-scale-balanced"></i>
+            <div>
+              <b>Fair & Transparent</b>
+              <span>Ethical sourcing and fair pricing that benefits artisans first.</span>
+            </div>
+          </div>
+          <div class="about-pill">
+            <i class="fa-solid fa-feather"></i>
+            <div>
+              <b>Authenticity</b>
+              <span>Verified products with regional identity and timeless techniques.</span>
+            </div>
+          </div>
+          <div class="about-pill">
+            <i class="fa-solid fa-seedling"></i>
+            <div>
+              <b>Sustainability</b>
+              <span>Encouraging eco-friendly materials and mindful consumption.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What We Offer -->
+  <section class="about-section">
+    <div class="about-container">
+      <div class="about-offers">
+        <div class="about-offer">
+          <div class="media" style="background-image:url('images/festivals/diwalii.png');"><span class="tag">Festivals</span></div>
+          <div class="body">
+            <h3>Festival Specials</h3>
+            <p>
+              Curations for Diwali, Navratri, Eid, Ganesh Chaturthi and more — decor, attire, sweets,
+              and crafts that honor rituals and bring families together.
+            </p>
+          </div>
+        </div>
+        <div class="about-offer">
+          <div class="media" style="background-image:url('images/products/Blue Pottery Vase.png');"><span class="tag">States</span></div>
+          <div class="body">
+            <h3>State Specials</h3>
+            <p>
+              Explore India state-by-state: Banarasi from Uttar Pradesh, blue pottery from Rajasthan,
+              Kasavu from Kerala, Channapatna toys from Karnataka, and more.
+            </p>
+          </div>
+        </div>
+        <div class="about-offer">
+          <div class="media" style="background-image:url('images/products/rangoli.jpg');"><span class="tag">Sellers</span></div>
+          <div class="body">
+            <h3>Empowering Sellers</h3>
+            <p>
+              Artisans and small businesses can apply as Sellers, showcase collections, and reach culture-loving
+              customers with transparent tools and fair policies.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="about-section">
+    <div class="about-container">
+      <h3 style="margin:0 0 14px">How Parampara Works</h3>
+      <div class="about-steps">
+        <div class="about-step"><div class="num">1</div><b>Discover</b><p>Browse festival collections and regional crafts curated by culture experts.</p></div>
+        <div class="about-step"><div class="num">2</div><b>Connect</b><p>We work directly with verified artisans and sellers across India.</p></div>
+        <div class="about-step"><div class="num">3</div><b>Support</b><p>Your purchase sustains livelihoods and keeps heritage alive.</p></div>
+        <div class="about-step"><div class="num">4</div><b>Celebrate</b><p>Bring home authentic pieces with stories, rituals, and craftsmanship.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Voices -->
+  <section class="about-section">
+    <div class="about-container about-testimonials">
+      <div class="about-quote">
+        <div class="meta"><i class="fa-solid fa-quote-left"></i> Kamala Devi — Weaver, Uttar Pradesh</div>
+        <p>
+          “Parampara helped me reach customers who value handloom. Their fair-pricing policy
+          ensures my craft is respected and sustainable for my family.”
+        </p>
+      </div>
+      <div class="about-quote">
+        <div class="meta"><i class="fa-solid fa-quote-left"></i> Ravi Kumar — Potter, Rajasthan</div>
+        <p>
+          “My blue pottery now ships across India during festivals. The curated collections
+          make it easy for customers to discover our heritage.”
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="about-section">
+    <div class="about-container">
+      <div class="about-cta">
+        <h3>Be Part of the Journey</h3>
+        <p>Explore authentic collections, or apply as a seller to showcase your craft on Parampara.</p>
+        <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+          <button class="btn" onclick="window.location.href='shop-state.html'"><i class="fa-solid fa-arrow-right"></i> Explore States</button>
+          <button class="btn" onclick="window.location.href='seller.html'"><i class="fa-solid fa-store"></i> Become a Seller</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <h3>Parampara</h3>
+        <p>Connecting authentic Indian artisans with the world, preserving our rich cultural heritage through traditional crafts and festival celebrations.</p>
+        <div class="social-icons">
+          <a href="#"><i class="fa-brands fa-facebook"></i></a>
+          <a href="#"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="shop-fest.html">Festival Specials</a></li>
+          <li><a href="shop-state.html">State Specials</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Customer Support</h4>
+        <ul>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Shipping Info</a></li>
+          <li><a href="#">Returns & Exchanges</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact Info</h4>
+        <ul>
+          <li><i class="fa-solid fa-envelope"></i> firstparampara@gmail.com </li>
+          <li><i class="fa-solid fa-phone"></i> +91 98765 43210</li>
+          <li><i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra, India</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Parampara. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>

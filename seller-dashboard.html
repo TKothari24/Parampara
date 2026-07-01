@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Seller Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Arrange Add Product form elements vertically */
+    #prodForm {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 18px 24px;
+  margin: 18px auto 0 auto;
+  max-width: 700px;
+  align-items: end;
+  justify-items: center;
+    }
+    #prodForm .row {
+  display: contents;
+    }
+    #prodForm .row > div {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+    }
+    #prodForm label {
+  margin-bottom: 4px;
+    }
+    #prodForm input, #prodForm textarea, #prodForm select {
+  width: 100%;
+  min-width: 120px;
+  box-sizing: border-box;
+  margin-bottom: 0;
+    }
+    #prodForm button[type="submit"] {
+  grid-column: 1 / 3;
+  justify-self: center;
+  margin-top: 18px;
+  min-width: 140px;
+    }
+    body {
+      background: linear-gradient(120deg, #fff8f2 0%, #ffe8d3 100%);
+      min-height: 100vh;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .wrap {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 0 18px 32px 18px;
+      background: #fff8f2;
+      border-radius: 18px;
+      box-shadow: 0 6px 32px 0 rgba(232,108,40,0.10);
+      border: 2px solid #e6a676;
+    }
+    .wrap h2 { margin: 0 0 6px; font-size: 1.8rem; color: #b50909; }
+    .subtle { color:#6b7280; margin: 0 0 16px; }
+    .muted {
+      color: #b50909;
+      font-size: 1.01rem;
+      margin-bottom: 8px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 22px;
+    }
+    /* Compact metrics row */
+    .metrics { display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; }
+    @media (max-width: 700px){ .metrics{ grid-template-columns: 1fr; } }
+    .metric { background:#fffef9; border:1px solid #e6a676; border-radius:10px; padding:12px; text-align:center; box-shadow: 0 2px 10px rgba(232,108,40,0.06); }
+    .metric h4 { margin:0; font-size:1.3rem; color:#e86c28; }
+    .metric small { color:#6b7280; display:block; margin-top:4px; }
+    .card {
+      border: 2px solid #e6a676;
+      padding: 22px 18px 18px 18px;
+      border-radius: 14px;
+      background: #fffef9;
+      box-shadow: 0 2px 12px 0 rgba(232,108,40,0.07);
+      margin-bottom: 0;
+    }
+    .card h3 {
+      color: #b50909;
+      font-size: 1.25rem;
+      margin-bottom: 1em;
+      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    }
+    .row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+    }
+    .row>* {
+  flex: 1 1 220px;
+    }
+    .table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px 0 rgba(232,108,40,0.06);
+      margin-top: 10px;
+      border: 1.5px solid #e6a676;
+    }
+    #list{ overflow-x:auto; }
+    .table th, .table td {
+      border-bottom: 1px solid #ffe8d3;
+      padding: 13px 10px;
+      text-align: center;
+      font-size: 1rem;
+    }
+    .table th {
+      background: linear-gradient(90deg, #fff3e6 0%, #ffe8d3 100%);
+      font-weight: 700;
+      color: #b50909;
+      font-size: 1.08rem;
+      letter-spacing: 0.01em;
+      border-bottom: 2px solid #e6a676;
+    }
+    .table tr:last-child td {
+      border-bottom: none;
+    }
+    .table tr:hover {
+      background: #fff8f2;
+      transition: background 0.2s;
+    }
+    .status {
+      padding: 4px 14px;
+      border-radius: 16px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      display: inline-block;
+      box-shadow: 0 1px 6px 0 rgba(230,108,40,0.07);
+    }
+    .ok {
+      background: #e1f7e6;
+      color: #127a2f;
+      border: 1.5px solid #34d399;
+    }
+    .warn {
+      background: #fff3cd;
+      color: #9a6b00;
+      border: 1.5px solid #fde68a;
+    }
+    button, input[type="submit"] {
+      background: linear-gradient(90deg, #ffe8d3 0%, #fff3e6 100%);
+      color: #b50909;
+      border: 2px solid #e6a676;
+      font-size: 1rem;
+      font-weight: 700;
+      border-radius: 8px;
+      padding: 8px 20px;
+      cursor: pointer;
+      transition: all 0.18s;
+      box-shadow: 0 1px 6px 0 rgba(230,108,40,0.07);
+    }
+    button:hover, input[type="submit"]:hover {
+      background: #ffe8d3;
+      color: #e86c28;
+      border: 2px solid #e86c28;
+      box-shadow: 0 2px 12px 0 rgba(232,108,40,0.13);
+      transform: translateY(-2px) scale(1.04);
+    }
+    .edit-prod{ background:#fff; border-color:#a7e3c3; color:#147a50; }
+    .edit-prod:hover{ background:#e8fff3; border-color:#147a50; color:#0e5b3b; }
+    .del-prod{ background:#fff; border-color:#f2b5b5; color:#b42323; }
+    .del-prod:hover{ background:#fff2f2; border-color:#b42323; color:#8e1b1b; }
+    input, textarea, select {
+      border: 2px solid #e6a676;
+      border-radius: 7px;
+      padding: 8px 10px;
+      font-size: 1rem;
+      background: #fff;
+      margin-bottom: 8px;
+      transition: border 0.18s, box-shadow 0.18s;
+    }
+    input:focus, textarea:focus, select:focus {
+      border: 2px solid #e86c28;
+      outline: none;
+      box-shadow: 0 0 6px rgba(232,108,40,0.13);
+    }
+    label {
+      font-weight: 600;
+      color: #b50909;
+      margin-bottom: 4px;
+      display: block;
+    }
+    img {
+      border-radius: 6px;
+      box-shadow: 0 1px 6px 0 rgba(230,108,40,0.07);
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="script.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <h2>Seller Dashboard</h2>
+    <p class="subtle">Manage your products and publish new listings. Images are stored in the product‑images</p>
+    <div id="gate" class="muted">Checking approval…</div>
+
+    <div id="content" style="display:none" class="grid">
+      <div class="metrics" id="metrics"></div>
+      <div class="card">
+        <h3>Add a Product</h3>
+        <form id="prodForm">
+          <div class="row">
+            <div>
+              <label>Name</label>
+              <input type="text" name="name" required />
+            </div>
+            <div>
+              <label>Price (₹)</label>
+              <input type="number" name="price" min="0" step="0.01" required />
+            </div>
+          </div>
+          <div class="row">
+            <div style="flex:1 1 100%">
+              <label>Description</label>
+              <textarea name="description" rows="3" required></textarea>
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <label>Festival</label>
+              <select name="festival_id" id="festivalSelect">
+                <option value="">None</option>
+              </select>
+            </div>
+            <div>
+              <label>State</label>
+              <select name="state_id" id="stateSelect">
+                <option value="">None</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <label>Image</label>
+              <input type="file" name="image" accept="image/*" />
+            </div>
+          </div>
+          <button type="submit">Publish</button>
+        </form>
+        <div class="muted" style="margin-top:8px">Images upload <code>product-images</code>.</div>
+      </div>
+
+      <div class="card">
+        <h3>Your Products</h3>
+        <div id="list"></div>
+      </div>
+      <div class="card">
+        <h3>Recent Orders</h3>
+        <div id="sellerOrders"></div>
+      </div>
+      <div class="card">
+        <h3>Notifications</h3>
+        <div id="notifications"></div>
+      </div>
+      <div class="card">
+        <h3>Tips for Better Sales</h3>
+        <div class="tips">
+          <div class="tip">Use bright, natural light and a clean background for product photos.</div>
+          <div class="tip">Highlight materials and tradition in your title and description.</div>
+          <div class="tip">Price realistically; keep stock updated to avoid cancellations.</div>
+          <div class="tip">Tag a festival or state to help customers discover your craft.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (async function sellerDash(){
+      const BUCKET = 'product-images';
+      const gate = document.getElementById('gate');
+      const content = document.getElementById('content');
+      const prodForm = document.getElementById('prodForm');
+      const list = document.getElementById('list');
+      const festivalSelect = document.getElementById('festivalSelect');
+      const stateSelect = document.getElementById('stateSelect');
+      const notifBox = document.getElementById('notifications');
+
+      if (!window.supabase) {
+        gate.textContent = 'Supabase script not found. Check your CDN import.';
+        return;
+      }
+
+      await supabaseInitPromise;
+      if (!supabase) {
+        gate.textContent = 'Supabase client initialization failed. Check console for errors.';
+        return;
+      }
+
+      // -------- Order detail modal --------
+      function ensureDetailModal(){
+        let overlay = document.getElementById('orderDetailOverlay');
+        if (!overlay){
+          overlay = document.createElement('div');
+          overlay.id = 'orderDetailOverlay';
+          overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:1200;';
+          overlay.innerHTML = `
+            <div class="modal" style="max-width:720px;width:calc(100% - 32px);background:#fff;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.2);overflow:hidden;">
+              <div class="modal-header" style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:#ffeed3;border-bottom:1px solid #f0d9b4;">
+                <h3 style="margin:0">Order Details</h3>
+                <button class="modal-close" style="background:transparent;border:none;font-size:20px;cursor:pointer">×</button>
+              </div>
+              <div class="modal-body" style="padding:16px;display:grid;gap:12px;">
+                <div id="orderDetailSummary"></div>
+                <div id="orderDetailShipping" class="checkout-section"></div>
+                <div id="orderDetailItems" class="checkout-section"></div>
+              </div>
+              <div class="modal-footer" style="display:flex;justify-content:flex-end;padding:12px 16px 16px"><button class="modal-close">Close</button></div>
+            </div>`;
+          document.body.appendChild(overlay);
+          overlay.addEventListener('click', (e) => { if (e.target.id==='orderDetailOverlay' || e.target.classList.contains('modal-close')) overlay.style.display = 'none'; });
+          document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ overlay.style.display='none'; } });
+        }
+        return overlay;
+      }
+
+      async function openOrderDetail(orderId){
+        if (!orderId) return;
+        const overlay = ensureDetailModal();
+        overlay.style.display = 'flex';
+        const sumEl = overlay.querySelector('#orderDetailSummary');
+        const shipEl = overlay.querySelector('#orderDetailShipping');
+        const itemsEl = overlay.querySelector('#orderDetailItems');
+        sumEl.innerHTML = 'Loading…'; shipEl.innerHTML = ''; itemsEl.innerHTML = '';
+        try {
+          const [{ data: order }, { data: items }, { data: shipping }] = await Promise.all([
+            supabase.from('orders').select('id, created_at, status, items_count, total_amount').eq('id', orderId).maybeSingle(),
+            supabase.from('order_items').select('product_name, qty, price, image_url').eq('order_id', orderId),
+            supabase.from('order_shipping').select('name, email, phone, address').eq('order_id', orderId).maybeSingle()
+          ]);
+          if (order) {
+            const when = order.created_at ? new Date(order.created_at).toLocaleString() : '';
+            sumEl.innerHTML = `<div class="checkout-section"><div class="summary-item"><span>Order</span><span>#${String(order.id).slice(0,8)}</span></div><div class="summary-item"><span>Placed</span><span>${when}</span></div><div class="summary-item"><span>Status</span><span>${order.status||'pending'}</span></div><div class="summary-total"><span>Total</span><span>₹${(Number(order.total_amount)||0).toLocaleString('en-IN')}</span></div></div>`;
+          }
+          if (shipping) {
+            shipEl.innerHTML = `<h3 style="border:none;margin:0 0 8px 0">Buyer</h3><div class="order-summary"><div class="summary-item"><span>Name</span><span>${shipping.name||''}</span></div><div class="summary-item"><span>Email</span><span>${shipping.email||''}</span></div><div class="summary-item"><span>Phone</span><span>${shipping.phone||''}</span></div><div class="summary-item"><span>Address</span><span>${shipping.address||''}</span></div></div>`;
+          } else {
+            shipEl.innerHTML = `<h3 style="border:none;margin:0 0 8px 0">Buyer</h3><div class="order-summary"><div class="summary-item"><span>Info</span><span>No shipping info saved.</span></div></div>`;
+          }
+          const listHtml = (items||[]).map(it => {
+            const img = it.image_url || 'images/placeholder.png';
+            const qty = Number(it.qty)||1; const price = Number(it.price)||0;
+            return `<div class="order-item"><img src="${img}" alt="${it.product_name}" onerror="this.onerror=null;this.src='images/placeholder.png';"/><div class="info"><div class="name">${it.product_name}</div><div class="meta">Qty: ${qty}</div></div><div class="price">₹${(qty*price).toLocaleString('en-IN')}</div></div>`;
+          }).join('');
+          itemsEl.innerHTML = `<h3 style="border:none;margin:0 0 8px 0">Items</h3><div class="order-items">${listHtml||'<div class="meta">No items</div>'}</div>`;
+        } catch (err) {
+          sumEl.innerHTML = '<div class="muted">Could not load order.</div>';
+        }
+      }
+
+      async function loadNotifications(){
+        if (!notifBox) return;
+        notifBox.innerHTML = '<div class="muted">Loading notifications…</div>';
+        const { data: { session } } = await supabase.auth.getSession();
+        const uid = session?.user?.id; if (!uid) { notifBox.innerHTML = '<div class="muted">Please log in.</div>'; return; }
+        const { data, error } = await supabase
+          .from('seller_notifications')
+          .select('id, created_at, order_id, items_count, total_amount, type, read')
+          .eq('seller_user_id', uid)
+          .order('created_at', { ascending: false })
+          .limit(50);
+        if (error) { notifBox.innerHTML = '<div class="muted">Could not load notifications.</div>'; return; }
+        renderNotifList(Array.isArray(data) ? data : []);
+      }
+
+      function renderNotifList(rows){
+        if (!notifBox) return;
+        if (!rows || rows.length === 0) { notifBox.innerHTML = '<div class="muted">No notifications yet.</div>'; return; }
+        const html = rows.map(n => {
+          const when = n.created_at ? new Date(n.created_at).toLocaleString() : '';
+          const badge = n.read ? '' : '<span class="status warn">New</span>';
+          return `
+            <div class="row notif-row" data-order-id="${n.order_id}" style="align-items:center; border-bottom:1px dashed #ffe8d3; padding:8px 0; cursor:pointer;">
+              <div style="flex:2 1 50%">Order #${String(n.order_id || '').slice(0,8)} • ${when}</div>
+              <div style="flex:1 1 20%; text-align:center">Items: <strong>${Number(n.items_count)||0}</strong></div>
+              <div style="flex:1 1 20%; text-align:center">Total: <strong>₹${(Number(n.total_amount)||0).toLocaleString('en-IN')}</strong></div>
+              <div style="flex:0 0 auto; display:flex; gap:8px; align-items:center;">
+                ${badge}
+                <button class="mark-read" data-id="${n.id}" ${n.read ? 'disabled' : ''}>Mark Read</button>
+              </div>
+            </div>`;
+        }).join('');
+        notifBox.innerHTML = html;
+        notifBox.querySelectorAll('.mark-read').forEach(btn => {
+          btn.addEventListener('click', async (e) => {
+            const id = btn.getAttribute('data-id');
+            try { await supabase.from('seller_notifications').update({ read: true }).eq('id', id); } catch {}
+            btn.disabled = true;
+            await loadNotifications();
+          });
+        });
+        // Click to open order details
+        notifBox.querySelectorAll('.notif-row').forEach(row => {
+          row.addEventListener('click', async () => {
+            const orderId = row.getAttribute('data-order-id');
+            await openOrderDetail(orderId);
+          });
+        });
+      }
+
+      function subscribeNotifications(){
+        if (!supabase || !supabase.channel) return;
+        (async () => {
+          const { data: { session } } = await supabase.auth.getSession();
+          const uid = session?.user?.id; if (!uid) return;
+          const chan = supabase.channel('seller_notifs_'+uid);
+          chan.on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'seller_notifications', filter: `seller_user_id=eq.${uid}` }, async (payload) => {
+            await loadNotifications();
+          }).subscribe();
+        })();
+      }
+
+      async function loadFormOptions(){
+        // Load festivals
+        try {
+          const { data: fests } = await supabase.from('festivals').select('id, name').order('name');
+          if (festivalSelect && fests) {
+            festivalSelect.innerHTML = '<option value="">None</option>' +
+              fests.map(f => `<option value="${f.id}">${f.name}</option>`).join('');
+          }
+        } catch {}
+        // Load states (id + name)
+        try {
+          const { data: states } = await supabase.from('states').select('id, name').order('name');
+          if (stateSelect && states) {
+            stateSelect.innerHTML = '<option value="">None</option>' +
+              states.map(s => `<option value="${s.id}" data-name="${s.name}">${s.name}</option>`).join('');
+          }
+        } catch {}
+      }
+
+      async function requireApprovedSeller(){
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session?.user) { gate.innerHTML = 'Please log in. <a href="login.html">Login</a>'; return null; }
+        const uid = session.user.id;
+        const { data, error } = await supabase
+          .from('sellers')
+          .select('approved, shop_name')
+          .eq('user_id', uid)
+          .maybeSingle();
+        if (error) { gate.textContent = 'Failed to check seller status.'; return null; }
+        if (!data) { gate.textContent = 'No seller application found. Submit the form first.'; return null; }
+        if (!data.approved) { gate.innerHTML = 'Your application is <span class="status warn">Pending</span>. Please wait for approval.'; return null; }
+        gate.innerHTML = `Approved seller: <strong>${data.shop_name || ''}</strong>`;
+        return uid;
+      }
+
+      async function fetchProducts(){
+        const { data: { session } } = await supabase.auth.getSession();
+        const uid = session?.user?.id;
+        if (!uid) return [];
+        const { data, error } = await supabase
+          .from('seller_products')
+          .select('id, name, price, image_url, created_at, description')
+          .eq('seller_user_id', uid)
+          .order('created_at', { ascending: false });
+        const metricsEl = document.getElementById('metrics');
+        if (error) {
+          list.innerHTML = '<p class="muted">Could not load products.</p>';
+          if (metricsEl) metricsEl.innerHTML = '';
+          return [];
+        }
+        if (!data || data.length === 0) {
+          list.innerHTML = '<p class="muted">No products yet.</p>';
+          if (metricsEl) metricsEl.innerHTML = `
+            <div class="metric"><h4>0</h4><small>Total Products</small></div>
+            <div class="metric"><h4>0</h4><small>Published Today</small></div>
+            <div class="metric"><h4>0</h4><small>With Images</small></div>`;
+          return [];
+        }
+        const rows = ['<table class="table"><thead><tr><th>Created</th><th>Name</th><th>Price</th><th>Image</th><th>Actions</th></tr></thead><tbody>'];
+        for (const r of data){
+          rows.push(`<tr>
+            <td>${r.created_at ? new Date(r.created_at).toLocaleString() : ''}</td>
+            <td>${r.name}</td>
+            <td>₹${Number(r.price || 0)}</td>
+            <td>${r.image_url ? `<img src="${r.image_url}" alt="img" style="height:40px">` : '-'}</td>
+            <td>
+              <button class="edit-prod" data-id="${r.id}">Edit</button>
+              <button class="del-prod" data-id="${r.id}">Delete</button>
+            </td>
+          </tr>`);
+        }
+        rows.push('</tbody></table>');
+        list.innerHTML = rows.join('');
+        // Update metrics
+        try {
+          const total = data.length;
+          const todayStr = new Date().toDateString();
+          const today = data.filter(x => x.created_at && new Date(x.created_at).toDateString() === todayStr).length;
+          const withImages = data.filter(x => !!x.image_url).length;
+          if (metricsEl) metricsEl.innerHTML = `
+            <div class="metric"><h4>${total}</h4><small>Total Products</small></div>
+            <div class="metric"><h4>${today}</h4><small>Published Today</small></div>
+            <div class="metric"><h4>${withImages}</h4><small>With Images</small></div>`;
+        } catch {}
+        return data;
+      }
+
+      async function uploadImage(file, uid){
+        if (!file || !file.size) return null;
+        const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+        const path = `${uid}/${Date.now()}_${safe}`;
+        const { error } = await supabase.storage.from(BUCKET).upload(path, file, { upsert: true, contentType: file.type || 'application/octet-stream' });
+        if (error) throw error;
+        const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
+        return data?.publicUrl || null;
+      }
+
+      async function bindForm(){
+        prodForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const { data: { session } } = await supabase.auth.getSession();
+          const uid = session?.user?.id; if (!uid) return;
+          const fd = new FormData(prodForm);
+          const name = String(fd.get('name')||'').trim();
+          const price = Number(fd.get('price')||0);
+          const description = String(fd.get('description')||'').trim();
+          const festival_id = String(fd.get('festival_id')||'').trim() || null;
+          const state_id_val = String(fd.get('state_id')||'').trim();
+          const state_id = state_id_val ? Number(state_id_val) : null;
+          let state_name = null;
+          if (state_id && stateSelect) {
+            const opt = stateSelect.querySelector(`option[value="${state_id}"]`);
+            state_name = opt?.getAttribute('data-name') || null;
+          }
+          if (!name || !description) { alert('Enter name and description'); return; }
+          let imageUrl = null;
+          const file = fd.get('image');
+          if (file && file.size) {
+            try { imageUrl = await uploadImage(file, uid); } catch { alert('Image upload failed, saving without image.'); }
+          }
+          const payload = { seller_user_id: uid, name, description, price, image_url: imageUrl, festival_id, state_id, state_name };
+          const { error } = await supabase.from('seller_products').insert(payload);
+          if (error) { alert('Save failed: ' + (error.message||'error')); return; }
+          prodForm.reset();
+          await fetchProducts();
+        });
+      }
+
+      (async () => {
+        const uid = await requireApprovedSeller();
+        if (!uid) return;
+        content.style.display = '';
+        await loadFormOptions();
+        await fetchProducts();
+        await bindForm();
+        await loadNotifications();
+        subscribeNotifications();
+
+        // Bind edit/delete actions via event delegation
+        list.addEventListener('click', async (e) => {
+          const editBtn = e.target.closest('.edit-prod');
+          const delBtn = e.target.closest('.del-prod');
+          const { data: { session } } = await supabase.auth.getSession();
+          const uid = session?.user?.id;
+          if (!uid) return;
+
+          if (editBtn) {
+            const id = editBtn.getAttribute('data-id');
+            // Fetch current row
+            const { data: cur, error } = await supabase.from('seller_products').select('name, description, price, image_url, festival_id, state_id, state_name').eq('id', id).maybeSingle();
+            if (error || !cur) { alert('Could not load product.'); return; }
+            const name = prompt('Name', cur.name);
+            if (name === null) return;
+            const priceStr = prompt('Price (₹)', String(cur.price || 0));
+            if (priceStr === null) return;
+            const description = prompt('Description', cur.description || '');
+            if (description === null) return;
+            let image_url = cur.image_url;
+            // Allow changing festival/state quickly via prompts (simple fallback)
+            const fest = prompt('Festival ID (leave blank for none)', cur.festival_id || '');
+            const stIdStr = prompt('State ID (leave blank for none)', (cur.state_id ?? '') + '');
+            const stNameStr = prompt('State Name (leave blank for none)', cur.state_name || '');
+            // Optional replace image via file input prompt
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            const replaceImage = confirm('Replace image? Click OK to choose a new file.');
+            if (replaceImage) {
+              fileInput.click();
+              await new Promise((res) => fileInput.addEventListener('change', res, { once: true }));
+              const f = fileInput.files && fileInput.files[0];
+              if (f) {
+                try { image_url = await uploadImage(f, uid); } catch { alert('Image upload failed, keeping old image.'); }
+              }
+            }
+            const price = Number(priceStr || 0);
+            const { error: updErr } = await supabase
+              .from('seller_products')
+              .update({ name, price, description, image_url, festival_id: (fest||'') || null, state_id: (stIdStr||'') || null, state_name: (stNameStr||'') || null })
+              .eq('id', id);
+            if (updErr) { alert('Update failed: ' + (updErr.message||'error')); return; }
+            await fetchProducts();
+            return;
+          }
+
+          if (delBtn) {
+            const id = delBtn.getAttribute('data-id');
+            if (!confirm('Delete this product?')) return;
+            const { error: delErr } = await supabase.from('seller_products').delete().eq('id', id);
+            if (delErr) { alert('Delete failed: ' + (delErr.message||'error')); return; }
+            await fetchProducts();
+            return;
+          }
+        });
+      })();
+      
+      // Load seller orders
+      async function loadSellerOrders() {
+        try {
+          const sellerOrdersContainer = document.getElementById('sellerOrders');
+          if (!sellerOrdersContainer) return;
+          
+          const user = await getCurrentUser();
+          if (!user) return;
+          
+          const { data: orders, error } = await supabase
+            .from('orders')
+            .select(`
+              id,
+              created_at,
+              status,
+              total,
+              order_notes,
+              order_items!inner(
+                product_name,
+                quantity,
+                price,
+                image
+              )
+            `)
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false })
+            .limit(10);
+            
+          if (error) throw error;
+          
+          if (!orders || orders.length === 0) {
+            sellerOrdersContainer.innerHTML = '<p style="color: #666; text-align: center; padding: 20px;">No orders yet</p>';
+            return;
+          }
+          
+          sellerOrdersContainer.innerHTML = orders.map(order => `
+            <div class="order-item" style="border: 1px solid #e0e0e0; padding: 12px; margin-bottom: 12px; border-radius: 8px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <strong>Order #${order.id.toString().slice(0, 8)}</strong>
+                <span style="background: ${order.status === 'pending' ? '#fff3cd' : '#d4edda'}; color: ${order.status === 'pending' ? '#856404' : '#155724'}; padding: 4px 8px; border-radius: 4px; font-size: 12px; text-transform: capitalize;">
+                  ${order.status}
+                </span>
+              </div>
+              <div style="font-size: 12px; color: #666; margin-bottom: 8px;">
+                ${new Date(order.created_at).toLocaleDateString()} at ${new Date(order.created_at).toLocaleTimeString()}
+              </div>
+              <div style="margin-bottom: 8px;">
+                ${order.order_items.map(item => `
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                    <img src="${item.image || 'images/placeholder.png'}" alt="${item.product_name}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
+                    <div style="flex: 1;">
+                      <div style="font-weight: 600; font-size: 14px;">${item.product_name}</div>
+                      <div style="color: #666; font-size: 12px;">Qty: ${item.quantity} × ₹${item.price}</div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #e0e0e0; padding-top: 8px;">
+                <strong>Total: ₹${order.total.toLocaleString('en-IN')}</strong>
+                <button onclick="viewOrderDetail('${order.id}')" style="background: #b50909; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                  View Details
+                </button>
+              </div>
+            </div>
+          `).join('');
+          
+        } catch (error) {
+          console.error('Error loading seller orders:', error);
+          const sellerOrdersContainer = document.getElementById('sellerOrders');
+          if (sellerOrdersContainer) {
+            sellerOrdersContainer.innerHTML = '<p style="color: #d32f2f; text-align: center;">Error loading orders</p>';
+          }
+        }
+      }
+      
+      // Load orders on page load
+      loadSellerOrders();
+      
+    })();
+  </script>
+</body>
+</html>

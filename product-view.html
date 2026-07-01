@@ -1,0 +1,357 @@
+  <style>
+    .festival-products-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 36px 32px;
+      justify-items: center;
+      align-items: stretch;
+      margin: 40px auto 48px auto;
+      max-width: 1200px;
+    
+    .festival-product-card {
+  min-width: 0;
+  box-sizing: border-box;
+  background: #fff;
+  border-radius: 14px;
+  border: 2px solid #e6a676;
+  box-shadow: 0 2px 12px 0 rgba(232,108,40,0.10);
+  padding: 20px 16px 18px 16px;
+  width: 100%;
+  max-width: 260px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: box-shadow 0.2s, border 0.2s;
+  position: relative;
+  overflow: hidden;
+  height: 410px;
+  min-height: 410px;
+    }
+    .festival-product-card:hover {
+      box-shadow: 0 6px 24px 0 rgba(232,108,40,0.18);
+      border: 2px solid #e86c28;
+      transform: translateY(-2px) scale(1.03);
+      z-index: 2;
+    }
+    .festival-product-card h3 {
+      color: #b50909;
+      font-size: 1.13rem;
+      margin: 10px 0 6px 0;
+      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+      text-align: center;
+      min-height: 2.2em;
+    }
+    .festival-product-card .price {
+      color: #e86c28;
+      font-weight: 700;
+      font-size: 1.08rem;
+      margin-bottom: 6px;
+    }
+    .festival-product-card .desc {
+  color: #444;
+  font-size: 0.98rem;
+  margin-bottom: 10px;
+  text-align: center;
+  min-height: 2.5em;
+  max-height: 4.5em;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+    }
+    .festival-product-card .badge-seller {
+      background: linear-gradient(90deg, #ffe8d3 0%, #fff3e6 100%);
+      color: #b50909;
+      border: 1.5px solid #e6a676;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      padding: 3px 12px;
+      margin-bottom: 8px;
+      margin-top: 2px;
+      display: inline-block;
+      box-shadow: 0 1px 6px 0 rgba(230,108,40,0.07);
+    }
+    .festival-product-card button.product-btn {
+      background: linear-gradient(90deg, #ffe8d3 0%, #fff3e6 100%);
+      color: #b50909;
+      border: 2px solid #e6a676;
+      font-size: 1rem;
+      font-weight: 700;
+      border-radius: 8px;
+      padding: 8px 20px;
+      cursor: pointer;
+      transition: all 0.18s;
+      box-shadow: 0 1px 6px 0 rgba(230,108,40,0.07);
+      margin-top: 8px;
+    }
+    .festival-product-card button.product-btn:hover {
+      background: #ffe8d3;
+      color: #e86c28;
+      border: 2px solid #e86c28;
+      box-shadow: 0 2px 12px 0 rgba(232,108,40,0.13);
+      transform: translateY(-2px) scale(1.04);
+    }
+    }
+    .festival-product-card img {
+      width: 100%;
+      max-width: 180px;
+      height: 160px;
+      object-fit: contain;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      background: #f7f7f7;
+    }
+    @media (max-width: 1100px) {
+      .festival-products-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 700px) {
+      .festival-products-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>State Specials - Parampara</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .diwali-featured-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px 4px;
+      justify-items: center;
+      align-items: stretch;
+      margin: 0 auto;
+      max-width: 1200px;
+    }
+    .diwali-featured-card {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      padding: 18px 12px 16px 12px;
+      width: 100%;
+      max-width: 260px;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: box-shadow 0.2s;
+    }
+    .diwali-featured-card img {
+      width: 100%;
+      max-width: 180px;
+      height: 160px;
+      object-fit: contain;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      background: #f7f7f7;
+    }
+    @media (max-width: 1100px) {
+      .diwali-featured-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 700px) {
+      .diwali-featured-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"/>
+</head>
+<body>
+
+
+  <!-- Navbar -->
+  <header>
+    <div class="navbar">
+      <a class="logo border" href="index.html">Parampara</a>
+      <div class="nav-links">
+        <a href="index.html" class="border">Home</a>
+        <a href="shop-fest.html" class="border"> Festival Specials</a>
+        <a href="shop-state.html" class="border active-page"> State Specials</a>
+        <a href="about.html" class="border">About Us</a>
+        <a href="contact.html" class="border">Contact Us</a>
+        <a class="cart border" href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+  <a class="Login border" href="login.html"><p>Login</p></a>
+  <a class="Signup border" href="signup.html"><p>Signup</p></a>
+  <div class="flex-spacer"></div>
+  <span id="userName"><i class="fa-regular fa-user"></i><span id="userNameText">username</span></span>
+  <a href="#" id="logoutBtn">Logout</a>
+      </div>
+    </div>
+  </header>
+
+
+
+<section class="section">
+  <h2 id="stateTitle" style="margin-bottom:1.5em;">State Collections</h2>
+  <div class="diwali-featured-grid" id="stateProducts"></div>
+</section>
+
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2025 Parampara. All rights reserved.</p>
+  </footer>
+  <script src="script.js"></script>
+  <!-- Script -->
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const params = new URLSearchParams(window.location.search);
+      const stateIdParam = parseInt(params.get('state_id'), 10);
+      const stateName = params.get('name') || '';
+
+      var SUPABASE_URL = "https://dtelpnugwnknweyirsmt.supabase.co";
+      var SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0ZWxwbnVnd25rbndleWlyc210Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMDE2NjUsImV4cCI6MjA3Mzc3NzY2NX0.yTGm_dEpuWRCCJwn_LKuQoY2hf3iOelbte_GnuPP0go";
+      var supabase = window.supabase && window.supabase.createClient
+        ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+        : undefined;
+      const container = document.getElementById("stateProducts");
+      if (!container) return;
+      container.innerHTML = "<p>Loading...</p>";
+      if (!supabase) {
+        container.innerHTML = "<p>Supabase client not initialized.</p>";
+        return;
+      }
+      // Set titles using the state name
+      const stateTitleEl = document.getElementById('stateTitle');
+      if (stateName && stateTitleEl) {
+        stateTitleEl.textContent = `${stateName} Specials`;
+        document.title = `${stateName} Specials - Parampara`;
+      }
+
+      // Determine effective state_id from name if not provided/invalid
+      let effectiveStateId = Number.isNaN(stateIdParam) ? null : stateIdParam;
+      if (!effectiveStateId && stateName) {
+        const { data: stRow } = await supabase
+          .from('states')
+          .select('id')
+          .ilike('name', stateName)
+          .maybeSingle();
+        if (stRow?.id) effectiveStateId = stRow.id;
+      }
+
+      // Fetch master products with resilient strategy to avoid 400
+      async function tryFetchMasterBy(column, value) {
+        try {
+          let q = supabase.from('master_products').select("name, description, price");
+          q = q.eq(column, value);
+          const { data, error } = await q;
+          if (error) return [];
+          return Array.isArray(data) ? data : [];
+        } catch { return []; }
+      }
+      let safeMaster = [];
+      if (effectiveStateId) {
+        safeMaster = await tryFetchMasterBy('state_id', effectiveStateId);
+      }
+      // Do not attempt fallbacks on non-existent text columns to avoid 400
+
+      // Fetch seller products tagged with this state (by name)
+      const { data: seller, error: sErr } = await supabase
+        .from('seller_products')
+        .select('name, description, price, image_url, state_name')
+        .ilike('state_name', `%${stateName}%`);
+      const safeSeller = (!sErr && Array.isArray(seller)) ? seller : [];
+
+      const merged = [
+        ...safeMaster.map(p => ({ ...p, _src: 'master' })),
+        ...safeSeller.map(p => ({ name: p.name, description: p.description, price: p.price, image_url: p.image_url, _src: 'seller' }))
+      ];
+
+      const localImageMap = {
+        "Dandiya Sticks": "images/products/dandiyasticks.jpg",
+        "Navratri Dandiya Sticks": "images/products/dandiyasticks.jpg",
+        "Decorated Dandiya Sticks": "images/products/dandiyasticks.jpg",
+        "Vibrant Lehenga-Choli": "images/products/Vibrant Lehenga-Choli.jpg",
+        "Kediyu & Dhoti (Men’s Outfit)": "images/products/Kediyu & Dhoti (Men’s Outfit).webp",
+        "Oxidized Silver Jewelry Set": "images/products/Oxidized Silver Jewelry Set.jpg",
+        "Shadu Mati Ganesh Idol": "images/products/ganesh-idol.jpg",
+        "Ukadiche Modak": "images/products/modak.png",
+        "Torans": "images/products/maharastrian toran.jpg",
+        "Decorative Mandap Set": "images/products/Decorative Mandap.jpeg",
+        "Bandhani Saree": "images/products/Bandhani saree.jpg",
+        "Blue Pottery Vase": "images/products/Blue Pottery Vase.png",
+        "Mojari Footwear": "images/products/Mojari Footwear.jpg",
+        "Rajasthani Puppet Set (Kathputli)": "images/products/Rajasthani Puppet Set (Kathputli).png",
+        "Kasavu Saree": "images/products/Kasavu Saree.jpg",
+        "Nettipattam Wall Hanging": "images/products/Nettipattam Wall Hanging.jpg",
+        "Coconut Shell Handicrafts": "images/products/Coconut Shell Handicrafts.jpg",
+        "Kerala Mural Painting (Mini Frame)": "images/products/Kerala Mural Painting (Mini Frame).jpg",
+        "Rasgulla": "images/products/Rasgulla.jpg",
+        "Kantha Embroidery Dupatta": "images/products/Kantha Embroidery Dupatta.jpg",
+        "Bankura Terracotta Horse": "images/products/Bankura Terracotta Horse.jpg",
+        "Dokra Metal Craft": "images/products/Dokra Metal Craft.jpg",
+        "Mysore Silk Saree": "images/products/Mysore Silk Saree.jpg",
+        "Sandalwood Carving": "images/products/Sandalwood Carving.jpg",
+        "Bidriware Vase": "images/products/Bidriware Vase.jpg",
+        "Channapatna Wooden Toys": "images/products/Channapatna Wooden Toys.jpg",
+        "Tanjore Painting": "images/products/Tanjore Painting.jpg",
+        "Bronze Idol (Chola Art)": "images/products/Bronze Idol (Chola Art).jpg",
+        "Mysore Pak": "images/products/MysorePak.jpg",
+        "Kanchipuram Silk Saree": "images/products/Kanchipuram Silk Saree.jpg",
+        "Chikankari Embroidered Dupatta": "images/products/Chikankari Embroidered Dupatta.jpg",
+        "Khurja Pottery Set": "images/products/Khurja Pottery Set.jpg",
+        "Petha Sweet from Agra": "images/products/Petha Sweet from Agra.jpg",
+        "Banarasi Saree": "images/products/Banarasi Saree.jpg",
+        "Phulkari Embroidery Dupatta": "images/products/Phulkari Embroidery Dupatta.jpg",
+        "Punjabi Jutti": "images/products/Punjabi Jutti.jpg",
+        "Gajak": "images/products/Gajak.jpg",
+        "Paranda": "images/products/Paranda.jpg",
+        "Pattachitra Painting": "images/products/Pattachitra Painting.jpg",
+        "Chhena Poda": "images/products/Chhena Poda.jpg",
+        "Sambalpuri Saree": "images/products/Sambalpuri Saree.jpg",
+        "Silver Filigree Jewelry": "images/products/Silver Filigree Jewelry.jpg",
+        "Assam Silk Mekhela Chador": "images/products/Assam Silk Mekhela Chador.jpg",
+        "Jaapi (Traditional Hat)": "images/products/Jaapi (Traditional Hat).jpg",
+        "Assam Tea Pack": "images/products/Assam Tea Pack.jpg",
+        "Dokra Brass Figurine": "images/products/Dokra Brass Figurine.jpg",
+        "Kullu Shawl": "images/products/Kullu Shawl.jpg",
+        "Chamba Rumal Embroidery": "images/products/Chamba Rumal Embroidery.jpg",
+        "Apple Cider Pack": "images/products/Apple-Cider.jpg",
+        "Kinnauri Topi": "images/products/Kinnauri Topi.jpg"
+      };
+
+      container.innerHTML = "";
+      merged.forEach(product => {
+        let imageUrl = 'images/placeholder.png';
+        if (product._src === 'seller') {
+          // Seller: use uploaded image only
+          imageUrl = product.image_url || 'images/placeholder.png';
+        } else {
+          // Master: use frontend image map only
+          if (localImageMap[product.name]) {
+            imageUrl = localImageMap[product.name];
+          }
+        }
+        const card = document.createElement("div");
+        card.className = "festival-product-card";
+        card.innerHTML = `
+          <img src="${imageUrl}" alt="${product.name}">
+          <h3>${product.name}</h3>
+          <p class="price">₹${product.price}</p>
+          <div class="desc">${product.description || ""}</div>
+          ${product._src === 'seller' ? '<span class="badge-seller">Seller</span>' : ''}
+          <button class="cart product-btn">Add to Cart</button>
+        `;
+        container.appendChild(card);
+      });
+    });
+  </script>
+            </div>
+          </div>
+       
+  </script>
+</body>
+</html>
